@@ -1,0 +1,14 @@
+# Subjects
+subjects/
+
+# Binários e Objetos
+/bin/
+/obj/
+*.o
+*.a
+*.d
+
+# Builds da MLX e Libft (se gerarem arquivos na raiz delas)
+lib/mlx/build/
+.DS_Store
+.vscode/

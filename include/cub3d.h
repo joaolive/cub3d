@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 13:45:39 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/07 11:08:22 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/01/07 11:27:11 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,11 @@
 #define FLAG_ROT_L (1 << 4) // 0001 0000
 #define FLAG_ROT_R (1 << 5) // 0010 0000
 
-// --- ÍNDICES DE TEXTURA (Lookup Table) ---
-#define TEX_NORTH 0
-#define TEX_SOUTH 1
-#define TEX_WEST 2
-#define TEX_EAST 3
+// --- ÍNDICES DE TEXTURA ---
+#define TEX_EAST 0
+#define TEX_WEST 1
+#define TEX_NORTH 2
+#define TEX_SOUTH 3
 
 typedef struct s_player
 {

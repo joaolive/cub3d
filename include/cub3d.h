@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 13:45:39 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/07 11:27:11 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/01/09 19:08:26 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,16 @@
 # include "libft.h"
 # include "MLX42/MLX42.h"
 
+// --- WINDOW ---
+#define WIN_WIDTH 1280
+#define WIN_HEIGHT 720
+#define WIN_TITLE "Cub3d"
+
 // --- BITMASKS DE MOVIMENTO ---
-#define FLAG_MOVE_N (1 << 0) // 0000 0001
+#define FLAG_MOVE_W (1 << 0) // 0000 0001
 #define FLAG_MOVE_S (1 << 1) // 0000 0010
-#define FLAG_MOVE_W (1 << 2) // 0000 0100
-#define FLAG_MOVE_E (1 << 3) // 0000 1000
+#define FLAG_MOVE_A (1 << 2) // 0000 0100
+#define FLAG_MOVE_D (1 << 3) // 0000 1000
 #define FLAG_ROT_L (1 << 4) // 0001 0000
 #define FLAG_ROT_R (1 << 5) // 0010 0000
 
@@ -99,4 +104,13 @@ typedef struct s_game
 	t_ray		ray;
 	double		delta_time;
 }	t_game;
+
+// core
+int	init_graphics(t_game *game);
+
+// render
+void	render_bg(t_game *game);
+
+// mock
+void init_mock_map(t_game *game);
 

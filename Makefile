@@ -6,7 +6,7 @@
 #    By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/06 05:55:59 by joaolive          #+#    #+#              #
-#    Updated: 2026/01/06 11:39:23 by joaolive         ###   ########.fr        #
+#    Updated: 2026/01/09 17:54:20 by joaolive         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,10 +54,15 @@ CPPFLAGS = -Iinclude -I$(LIBFT_DIR)/include -I$(MLX_DIR)/include
 LDFLAGS = -L$(LIBFT_DIR) -L$(MLX_BUILD)
 LDLIBS = -lft -lmlx42 -lglfw -lpng16 -ldl -pthread -lm
 
-SRC_NAMES = main
+SRC_MAIN = main mock_map
+SRC_CORE = init_graphics
+SRC_RENDER = render_bg
 
 # Source files
-SRC = $(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_NAMES)))
+SRC = \
+	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_MAIN))) \
+	$(addprefix $(SRC_DIR)/core/, $(addsuffix .c, $(SRC_CORE))) \
+	$(addprefix $(SRC_DIR)/render/, $(addsuffix .c, $(SRC_RENDER)))
 
 # Object files
 SRC_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
@@ -80,10 +85,11 @@ $(EXEC): $(SRC_OBJS) | $(BIN_DIR)
 	@printf "\b\b $(CC_GREEN)OK!$(RESET)\n"
 	$(CC) $(SRC_OBJS) $(LDFLAGS) $(LDLIBS) -o $(EXEC)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
 	@$(CC) $(CCFLAGS) $(DEPFLAGS) $(CPPFLAGS) -c $< -o $@
 
-$(BIN_DIR) $(OBJ_DIR):
+$(BIN_DIR):
 	@mkdir -p $@
 
 $(LIBFT):

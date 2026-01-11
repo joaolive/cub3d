@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 13:45:39 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/09 19:08:26 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/01/11 15:48:49 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,12 @@
 #define TEX_WEST 1
 #define TEX_NORTH 2
 #define TEX_SOUTH 3
+
+typedef struct s_keymap
+{
+	keys_t	key;
+	uint8_t	value;
+}	t_keymap;
 
 typedef struct s_player
 {
@@ -107,9 +113,14 @@ typedef struct s_game
 
 // core
 int	init_graphics(t_game *game);
+void	game_loop(void *param);
 
 // render
 void	render_bg(t_game *game);
+
+// input
+void	key_handler(mlx_key_data_t key, void *param);
+void	player_controls(mlx_key_data_t key, t_game *game);
 
 // mock
 void init_mock_map(t_game *game);

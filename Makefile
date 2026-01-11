@@ -6,7 +6,7 @@
 #    By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/06 05:55:59 by joaolive          #+#    #+#              #
-#    Updated: 2026/01/09 17:54:20 by joaolive         ###   ########.fr        #
+#    Updated: 2026/01/11 15:46:46 by joaolive         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,14 +55,16 @@ LDFLAGS = -L$(LIBFT_DIR) -L$(MLX_BUILD)
 LDLIBS = -lft -lmlx42 -lglfw -lpng16 -ldl -pthread -lm
 
 SRC_MAIN = main mock_map
-SRC_CORE = init_graphics
+SRC_CORE = init_graphics game_loop
 SRC_RENDER = render_bg
+SRC_INPUTS = key_handler player_controls
 
 # Source files
 SRC = \
 	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_MAIN))) \
 	$(addprefix $(SRC_DIR)/core/, $(addsuffix .c, $(SRC_CORE))) \
-	$(addprefix $(SRC_DIR)/render/, $(addsuffix .c, $(SRC_RENDER)))
+	$(addprefix $(SRC_DIR)/render/, $(addsuffix .c, $(SRC_RENDER))) \
+	$(addprefix $(SRC_DIR)/inputs/, $(addsuffix .c, $(SRC_INPUTS)))
 
 # Object files
 SRC_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))

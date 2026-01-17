@@ -58,7 +58,7 @@ SRC_MAIN = main mock_map
 SRC_CORE = init_graphics game_loop
 SRC_RENDER = render_bg
 SRC_INPUTS = key_handler player_controls
-SRC_PARSING = parser parse_utils validators extractors color_parser
+SRC_PARSING = parser parse_utils validators map_validators extractors color_parser
 
 # Source files
 SRC = \

@@ -13,4 +13,4 @@ lib/mlx/build/
 .DS_Store
 .vscode/
 
-.issues.md
+*.md

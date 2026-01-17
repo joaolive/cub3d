@@ -6,6 +6,7 @@ static int	process_texture_line(char *line, t_tex *tex)
 	char	*trimmed;
 	char	**parts;
 	int		result;
+	int		i;
 
 	trimmed = trim_whitespace(line);
 	if (!trimmed)
@@ -14,39 +15,25 @@ static int	process_texture_line(char *line, t_tex *tex)
 	free(trimmed);
 	if (!parts || !parts[0])
 	{
-		free_split(parts);
+		i = 0;
+		while (parts && parts[i])
+			free(parts[i++]);
+		free(parts);
 		return (0);
 	}
 	result = 0;
-	if (ft_strcmp(parts[0], "NO") == 0)
-	{
-		if (!parts[1] || validate_texture_path(parts[1]) != 0)
-			result = -1;
-		else
-			tex->walls[TEX_NORTH].tex = mlx_load_png(parts[1]);
-	}
-	else if (ft_strcmp(parts[0], "SO") == 0)
-	{
-		if (!parts[1] || validate_texture_path(parts[1]) != 0)
-			result = -1;
-		else
-			tex->walls[TEX_SOUTH].tex = mlx_load_png(parts[1]);
-	}
-	else if (ft_strcmp(parts[0], "WE") == 0)
-	{
-		if (!parts[1] || validate_texture_path(parts[1]) != 0)
-			result = -1;
-		else
-			tex->walls[TEX_WEST].tex = mlx_load_png(parts[1]);
-	}
-	else if (ft_strcmp(parts[0], "EA") == 0)
-	{
-		if (!parts[1] || validate_texture_path(parts[1]) != 0)
-			result = -1;
-		else
-			tex->walls[TEX_EAST].tex = mlx_load_png(parts[1]);
-	}
-	free_split(parts);
+	if (ft_strcmp(parts[0], "NO") == 0 && parts[1])
+		result = validate_texture_path(parts[1]) != 0 ? -1 : (tex->walls[TEX_NORTH].tex = mlx_load_png(parts[1]), 0);
+	else if (ft_strcmp(parts[0], "SO") == 0 && parts[1])
+		result = validate_texture_path(parts[1]) != 0 ? -1 : (tex->walls[TEX_SOUTH].tex = mlx_load_png(parts[1]), 0);
+	else if (ft_strcmp(parts[0], "WE") == 0 && parts[1])
+		result = validate_texture_path(parts[1]) != 0 ? -1 : (tex->walls[TEX_WEST].tex = mlx_load_png(parts[1]), 0);
+	else if (ft_strcmp(parts[0], "EA") == 0 && parts[1])
+		result = validate_texture_path(parts[1]) != 0 ? -1 : (tex->walls[TEX_EAST].tex = mlx_load_png(parts[1]), 0);
+	i = 0;
+	while (parts && parts[i])
+		free(parts[i++]);
+	free(parts);
 	return (result);
 }
 
@@ -69,13 +56,13 @@ int	extract_textures(char **lines, t_tex *tex)
 	return (0);
 }
 
-
 static int	process_color_line(char *line, t_tex *tex)
 {
 	char	*trimmed;
 	char	**parts;
 	uint32_t	color;
 	int		result;
+	int		i;
 
 	trimmed = trim_whitespace(line);
 	if (!trimmed)
@@ -84,37 +71,35 @@ static int	process_color_line(char *line, t_tex *tex)
 	free(trimmed);
 	if (!parts || !parts[0])
 	{
-		free_split(parts);
+		i = 0;
+		while (parts && parts[i])
+			free(parts[i++]);
+		free(parts);
 		return (0);
 	}
 	result = 0;
-	if (ft_strcmp(parts[0], "F") == 0)
+	if (ft_strcmp(parts[0], "F") == 0 && parts[1])
 	{
-		if (!parts[1] || validate_color_format(parts[1]) != 0)
+		if (validate_color_format(parts[1]) != 0)
 			result = -1;
+		else if ((color = parse_rgb_to_hex(parts[1])) != 0xFFFFFFFF)
+			tex->floor = color;
 		else
-		{
-			color = parse_rgb_to_hex(parts[1]);
-			if (color == 0xFFFFFFFF)
-				result = -1;
-			else
-				tex->floor = color;
-		}
+			result = -1;
 	}
-	else if (ft_strcmp(parts[0], "C") == 0)
+	else if (ft_strcmp(parts[0], "C") == 0 && parts[1])
 	{
-		if (!parts[1] || validate_color_format(parts[1]) != 0)
+		if (validate_color_format(parts[1]) != 0)
 			result = -1;
+		else if ((color = parse_rgb_to_hex(parts[1])) != 0xFFFFFFFF)
+			tex->ceiling = color;
 		else
-		{
-			color = parse_rgb_to_hex(parts[1]);
-			if (color == 0xFFFFFFFF)
-				result = -1;
-			else
-				tex->ceiling = color;
-		}
+			result = -1;
 	}
-	free_split(parts);
+	i = 0;
+	while (parts && parts[i])
+		free(parts[i++]);
+	free(parts);
 	return (result);
 }
 
@@ -134,32 +119,27 @@ int	extract_colors(char **lines, t_tex *tex)
 	return (0);
 }
 
-
 int	extract_map(char **lines, int start_line, t_map *map)
 {
-	int		i;
-	int		height;
-	int		width;
-	int		max_width;
-	char	*cleaned;
-	int		len;
+	int	i;
+	int	width;
+	int	max_width;
+	int	height;
+	int	len;
 
 	if (!lines || !map)
 		return (-1);
 	height = 0;
 	max_width = 0;
 	i = start_line;
-	while (lines[i])
+	while (lines[i] && !is_empty_line(lines[i]))
 	{
-		if (!is_empty_line(lines[i]))
-		{
-			width = ft_strlen(lines[i]);
-			if (width > 0 && lines[i][width - 1] == '\n')
-				width--;
-			if (width > max_width)
-				max_width = width;
-			height++;
-		}
+		width = ft_strlen(lines[i]);
+		if (width > 0 && lines[i][width - 1] == '\n')
+			width--;
+		if (width > max_width)
+			max_width = width;
+		height++;
 		i++;
 	}
 	map->width = max_width;
@@ -172,14 +152,13 @@ int	extract_map(char **lines, int start_line, t_map *map)
 	{
 		if (!is_empty_line(lines[start_line]))
 		{
-			cleaned = ft_strdup(lines[start_line]);
-			if (cleaned)
+			map->grid[i] = ft_strdup(lines[start_line]);
+			if (map->grid[i])
 			{
-				len = ft_strlen(cleaned);
-				if (len > 0 && cleaned[len - 1] == '\n')
-					cleaned[len - 1] = '\0';
+				len = ft_strlen(map->grid[i]);
+				if (len > 0 && map->grid[i][len - 1] == '\n')
+					map->grid[i][len - 1] = '\0';
 			}
-			map->grid[i] = cleaned;
 			i++;
 		}
 		start_line++;
@@ -187,3 +166,6 @@ int	extract_map(char **lines, int start_line, t_map *map)
 	map->grid[i] = NULL;
 	return (0);
 }
+
+
+

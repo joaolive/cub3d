@@ -21,6 +21,7 @@ int	extract_map(char **lines, int start_line, t_map *map);
 int	validate_texture_path(const char *path);
 int	validate_color_format(const char *color_str);
 int	validate_rgb_values(int r, int g, int b);
+
 int	validate_map_characters(const t_map *map);
 int	validate_map_surrounded(const t_map *map);
 int	validate_single_player(t_map *map);
@@ -28,7 +29,6 @@ int	validate_single_player(t_map *map);
 char	*trim_whitespace(char *str);
 char	**read_file_to_array(const char *filename);
 void	free_file_array(char **arr);
-void	free_split(char **arr);
 int		count_lines(char **arr);
 int		is_empty_line(const char *line);
 uint32_t	parse_rgb_to_hex(const char *rgb_str);

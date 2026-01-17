@@ -122,6 +122,9 @@ void	render_bg(t_game *game);
 void	key_handler(mlx_key_data_t key, void *param);
 void	player_controls(mlx_key_data_t key, t_game *game);
 
+// parsing
+int	parse_map_file(const char *filename, t_game *game);
+
 // mock
 void init_mock_map(t_game *game);
 

@@ -58,13 +58,15 @@ SRC_MAIN = main mock_map
 SRC_CORE = init_graphics game_loop
 SRC_RENDER = render_bg
 SRC_INPUTS = key_handler player_controls
+SRC_PARSING = parser parse_utils validators extractors
 
 # Source files
 SRC = \
 	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_MAIN))) \
 	$(addprefix $(SRC_DIR)/core/, $(addsuffix .c, $(SRC_CORE))) \
 	$(addprefix $(SRC_DIR)/render/, $(addsuffix .c, $(SRC_RENDER))) \
-	$(addprefix $(SRC_DIR)/inputs/, $(addsuffix .c, $(SRC_INPUTS)))
+	$(addprefix $(SRC_DIR)/inputs/, $(addsuffix .c, $(SRC_INPUTS))) \
+	$(addprefix $(SRC_DIR)/parsing/, $(addsuffix .c, $(SRC_PARSING)))
 
 # Object files
 SRC_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))

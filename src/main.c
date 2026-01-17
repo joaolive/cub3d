@@ -1,26 +1,25 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/05 14:27:59 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/11 15:48:15 by joaolive         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "cub3d.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
 	t_game	game;
-	init_mock_map(&game); // mapa mockado
+
+	if (argc == 2)
+	{
+		if (parse_map_file(argv[1], &game) != 0)
+		{
+			ft_putstr_fd("Error\n", 2);
+			return (1);
+		}
+	}
+	else
+	{
+		init_mock_map(&game);
+	}
 	if (init_graphics(&game))
 		return (1);
 	mlx_key_hook(game.mlx, &key_handler, &game);
 	mlx_loop_hook(game.mlx, &game_loop, &game);
 	mlx_loop(game.mlx);
-	// terminate(game); // TODO
 	return (0);
 }

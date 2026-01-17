@@ -13,7 +13,7 @@ char	*trim_whitespace(char *str)
 	while (str[start] && (str[start] == ' ' || str[start] == '\t'))
 		start++;
 	end = ft_strlen(str) - 1;
-	while (end >= start && (str[end] == ' ' || str[end] == '\t'))
+	while (end >= start && (str[end] == ' ' || str[end] == '\t' || str[end] == '\n'))
 		end--;
 	if (end < start)
 		return (ft_strdup(""));

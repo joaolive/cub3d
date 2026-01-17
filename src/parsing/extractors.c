@@ -1,117 +1,134 @@
 #include "parsing.h"
 #include <unistd.h>
 
-int	extract_textures(char **lines, t_tex *tex)
+static int	process_texture_line(char *line, t_tex *tex)
 {
-	int		i;
 	char	*trimmed;
 	char	**parts;
+	int		result;
+
+	trimmed = trim_whitespace(line);
+	if (!trimmed)
+		return (0);
+	parts = ft_split(trimmed, ' ');
+	free(trimmed);
+	if (!parts || !parts[0])
+	{
+		free_split(parts);
+		return (0);
+	}
+	result = 0;
+	if (ft_strcmp(parts[0], "NO") == 0)
+	{
+		if (!parts[1] || validate_texture_path(parts[1]) != 0)
+			result = -1;
+		else
+			tex->walls[TEX_NORTH].tex = mlx_load_png(parts[1]);
+	}
+	else if (ft_strcmp(parts[0], "SO") == 0)
+	{
+		if (!parts[1] || validate_texture_path(parts[1]) != 0)
+			result = -1;
+		else
+			tex->walls[TEX_SOUTH].tex = mlx_load_png(parts[1]);
+	}
+	else if (ft_strcmp(parts[0], "WE") == 0)
+	{
+		if (!parts[1] || validate_texture_path(parts[1]) != 0)
+			result = -1;
+		else
+			tex->walls[TEX_WEST].tex = mlx_load_png(parts[1]);
+	}
+	else if (ft_strcmp(parts[0], "EA") == 0)
+	{
+		if (!parts[1] || validate_texture_path(parts[1]) != 0)
+			result = -1;
+		else
+			tex->walls[TEX_EAST].tex = mlx_load_png(parts[1]);
+	}
+	free_split(parts);
+	return (result);
+}
+
+int	extract_textures(char **lines, t_tex *tex)
+{
+	int	i;
 
 	if (!lines || !tex)
 		return (-1);
 	i = 0;
 	while (lines[i] && !is_empty_line(lines[i]))
 	{
-		trimmed = trim_whitespace(lines[i]);
-		if (!trimmed)
+		if (process_texture_line(lines[i], tex) != 0)
 			return (-1);
-		parts = ft_split(trimmed, ' ');
-		free(trimmed);
-		if (!parts)
-			return (-1);
-		if (ft_strcmp(parts[0], "NO") == 0 && parts[1])
-		{
-			if (validate_texture_path(parts[1]))
-			{
-				free_split(parts);
-				return (-1);
-			}
-			tex->walls[TEX_NORTH].tex = mlx_load_png(parts[1]);
-		}
-		else if (ft_strcmp(parts[0], "SO") == 0 && parts[1])
-		{
-			if (validate_texture_path(parts[1]))
-			{
-				free_split(parts);
-				return (-1);
-			}
-			tex->walls[TEX_SOUTH].tex = mlx_load_png(parts[1]);
-		}
-		else if (ft_strcmp(parts[0], "WE") == 0 && parts[1])
-		{
-			if (validate_texture_path(parts[1]))
-			{
-				free_split(parts);
-				return (-1);
-			}
-			tex->walls[TEX_WEST].tex = mlx_load_png(parts[1]);
-		}
-		else if (ft_strcmp(parts[0], "EA") == 0 && parts[1])
-		{
-			if (validate_texture_path(parts[1]))
-			{
-				free_split(parts);
-				return (-1);
-			}
-			tex->walls[TEX_EAST].tex = mlx_load_png(parts[1]);
-		}
-		free_split(parts);
 		i++;
 	}
+	if (!tex->walls[TEX_NORTH].tex || !tex->walls[TEX_SOUTH].tex ||
+		!tex->walls[TEX_WEST].tex || !tex->walls[TEX_EAST].tex)
+		return (-1);
 	return (0);
 }
 
 
-int	extract_colors(char **lines, t_tex *tex)
+static int	process_color_line(char *line, t_tex *tex)
 {
-	int		i;
 	char	*trimmed;
 	char	**parts;
 	uint32_t	color;
+	int		result;
+
+	trimmed = trim_whitespace(line);
+	if (!trimmed)
+		return (0);
+	parts = ft_split(trimmed, ' ');
+	free(trimmed);
+	if (!parts || !parts[0])
+	{
+		free_split(parts);
+		return (0);
+	}
+	result = 0;
+	if (ft_strcmp(parts[0], "F") == 0)
+	{
+		if (!parts[1] || validate_color_format(parts[1]) != 0)
+			result = -1;
+		else
+		{
+			color = parse_rgb_to_hex(parts[1]);
+			if (color == 0xFFFFFFFF)
+				result = -1;
+			else
+				tex->floor = color;
+		}
+	}
+	else if (ft_strcmp(parts[0], "C") == 0)
+	{
+		if (!parts[1] || validate_color_format(parts[1]) != 0)
+			result = -1;
+		else
+		{
+			color = parse_rgb_to_hex(parts[1]);
+			if (color == 0xFFFFFFFF)
+				result = -1;
+			else
+				tex->ceiling = color;
+		}
+	}
+	free_split(parts);
+	return (result);
+}
+
+int	extract_colors(char **lines, t_tex *tex)
+{
+	int	i;
 
 	if (!lines || !tex)
 		return (-1);
 	i = 0;
 	while (lines[i] && !is_empty_line(lines[i]))
 	{
-		trimmed = trim_whitespace(lines[i]);
-		if (!trimmed)
+		if (process_color_line(lines[i], tex) != 0)
 			return (-1);
-		parts = ft_split(trimmed, ' ');
-		free(trimmed);
-		if (!parts)
-			return (-1);
-		if (ft_strcmp(parts[0], "F") == 0 && parts[1])
-		{
-			if (validate_color_format(parts[1]))
-			{
-				free_split(parts);
-				return (-1);
-			}
-			color = parse_rgb_to_hex(parts[1]);
-			if (color == 0)
-			{
-				free_split(parts);
-				return (-1);
-			}
-			tex->floor = color;
-		}
-		else if (ft_strcmp(parts[0], "C") == 0 && parts[1])
-		{
-			if (validate_color_format(parts[1]))
-			{
-				free_split(parts);
-				return (-1);
-			}
-			color = parse_rgb_to_hex(parts[1]);
-			if (color == 0)
-			{
-				free_split(parts);
-				return (-1);
-			}
-			tex->ceiling = color;
-		}
-		free_split(parts);
 		i++;
 	}
 	return (0);

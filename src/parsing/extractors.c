@@ -23,13 +23,33 @@ static int	process_texture_line(char *line, t_tex *tex)
 	}
 	result = 0;
 	if (ft_strcmp(parts[0], "NO") == 0 && parts[1])
-		result = validate_texture_path(parts[1]) != 0 ? -1 : (tex->walls[TEX_NORTH].tex = mlx_load_png(parts[1]), 0);
+	{
+		if (validate_texture_path(parts[1]) != 0)
+			result = -1;
+		else
+			tex->walls[TEX_NORTH].tex = mlx_load_png(parts[1]);
+	}
 	else if (ft_strcmp(parts[0], "SO") == 0 && parts[1])
-		result = validate_texture_path(parts[1]) != 0 ? -1 : (tex->walls[TEX_SOUTH].tex = mlx_load_png(parts[1]), 0);
+	{
+		if (validate_texture_path(parts[1]) != 0)
+			result = -1;
+		else
+			tex->walls[TEX_SOUTH].tex = mlx_load_png(parts[1]);
+	}
 	else if (ft_strcmp(parts[0], "WE") == 0 && parts[1])
-		result = validate_texture_path(parts[1]) != 0 ? -1 : (tex->walls[TEX_WEST].tex = mlx_load_png(parts[1]), 0);
+	{
+		if (validate_texture_path(parts[1]) != 0)
+			result = -1;
+		else
+			tex->walls[TEX_WEST].tex = mlx_load_png(parts[1]);
+	}
 	else if (ft_strcmp(parts[0], "EA") == 0 && parts[1])
-		result = validate_texture_path(parts[1]) != 0 ? -1 : (tex->walls[TEX_EAST].tex = mlx_load_png(parts[1]), 0);
+	{
+		if (validate_texture_path(parts[1]) != 0)
+			result = -1;
+		else
+			tex->walls[TEX_EAST].tex = mlx_load_png(parts[1]);
+	}
 	i = 0;
 	while (parts && parts[i])
 		free(parts[i++]);

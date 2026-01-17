@@ -49,19 +49,23 @@ int	validate_map_characters(const t_map *map)
 {
 	int	i;
 	int	j;
+	int	len;
 
 	if (!map || !map->grid)
 		return (-1);
 	i = 0;
 	while (i < map->height)
 	{
+		if (!map->grid[i])
+			return (-1);
 		j = 0;
-		while (map->grid[i][j])
+		len = ft_strlen(map->grid[i]);
+		while (j < len && map->grid[i][j])
 		{
 			if (map->grid[i][j] != '0' && map->grid[i][j] != '1' &&
 				map->grid[i][j] != 'N' && map->grid[i][j] != 'S' &&
 				map->grid[i][j] != 'E' && map->grid[i][j] != 'W' &&
-				map->grid[i][j] != ' ' && map->grid[i][j] != '\n')
+				map->grid[i][j] != ' ')
 				return (-1);
 			j++;
 		}
@@ -78,33 +82,34 @@ int	validate_map_surrounded(const t_map *map)
 	if (!map || !map->grid || map->height == 0 || map->width == 0)
 		return (-1);
 	i = 0;
-	while (i < map->width && map->grid[0])
+	while (i < map->width && i < (int)ft_strlen(map->grid[0]))
 	{
-		if (map->grid[0][i] != '1' && map->grid[0][i] != '\n')
+		if (map->grid[0][i] != '1')
 			return (-1);
 		i++;
 	}
-	i = 0;
-	while (i < map->height)
+	i = 1;
+	while (i < map->height - 1)
 	{
+		if (!map->grid[i])
+			return (-1);
 		len = ft_strlen(map->grid[i]);
-		if (len > 0 && map->grid[i][len - 1] == '\n')
-			len--;
 		if (map->grid[i][0] != '1')
 			return (-1);
 		if (len > 0 && map->grid[i][len - 1] != '1')
 			return (-1);
 		i++;
 	}
-	i = 0;
-	len = ft_strlen(map->grid[map->height - 1]);
-	if (len > 0 && map->grid[map->height - 1][len - 1] == '\n')
-		len--;
-	while (i < len)
+	if (map->height > 1)
 	{
-		if (map->grid[map->height - 1][i] != '1')
-			return (-1);
-		i++;
+		i = 0;
+		len = ft_strlen(map->grid[map->height - 1]);
+		while (i < len && i < map->width)
+		{
+			if (map->grid[map->height - 1][i] != '1')
+				return (-1);
+			i++;
+		}
 	}
 	return (0);
 }

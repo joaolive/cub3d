@@ -1,23 +1,23 @@
 # 📋 PLANO DE AÇÃO - ISSUE 1: Sistema de Parsing do Arquivo .cub
 
-**Data:** 17/01/2026  
-**Status:** ⏳ Planejamento  
-**Prioridade:** 🔴 CRÍTICA  
-**Tempo Estimado:** 2-3 dias  
+**Status:** ⏳ FASE 3 EM ANDAMENTO
+**Data:** 17/01/2026
 
 ---
 
-## 📊 CONTEXTO DO PROJETO
+## ✅ FASES CONCLUÍDAS
 
-### Estado Atual
-- ✅ Infraestrutura pronta (Makefile, libft, MLX42)
-- ✅ Estruturas de dados definidas (`t_game`, `t_player`, `t_map`, `t_tex`, etc.)
-- ✅ Sistema básico de entrada e loop do jogo
-- ✅ Mapa mockado funcionando (para testes)
-- ❌ **Parser .cub não implementado** ← **BLOQUEADOR**
+### FASE 1: Estrutura e Leitura ✅
+- ✅ Diretório criado
+- ✅ Headers e arquivos base
+- ✅ Funções utilitárias
 
-### Problema
-Atualmente o jogo usa `init_mock_map()` que cria um mapa de teste. Para funcionar com arquivos reais, precisamos implementar o sistema completo de parsing.
+### FASE 2: Extractors ✅
+- ✅ `extract_textures()` completo
+- ✅ `extract_colors()` com parse RGB→RGBA
+- ✅ `extract_map()` com limpeza de quebras
+- ✅ `color_parser.c` implementado
+- ✅ Compilação OK
 
 ---
 
@@ -48,17 +48,6 @@ Implementar um sistema robusto de leitura, parsing e validação de arquivos `.c
 ```
 NO ./path/to/north_texture
 SO ./path/to/south_texture
-WE ./path/to/west_texture
-EA ./path/to/east_texture
-F 220,100,0
-C 225,30,0
-
-1111111111
-1000000001
-1010001001
-1001N00101
-1111111111
-```
 
 ### Regras de Formato:
 - ✅ Elementos podem estar em **qualquer ordem** (exceto mapa)

@@ -31,5 +31,6 @@ void	free_file_array(char **arr);
 void	free_split(char **arr);
 int		count_lines(char **arr);
 int		is_empty_line(const char *line);
+uint32_t	parse_rgb_to_hex(const char *rgb_str);
 
 #endif

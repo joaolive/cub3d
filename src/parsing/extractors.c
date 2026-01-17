@@ -67,6 +67,7 @@ int	extract_colors(char **lines, t_tex *tex)
 	int		i;
 	char	*trimmed;
 	char	**parts;
+	uint32_t	color;
 
 	if (!lines || !tex)
 		return (-1);
@@ -87,7 +88,13 @@ int	extract_colors(char **lines, t_tex *tex)
 				free_split(parts);
 				return (-1);
 			}
-			// TODO: Parse RGB e converter para hex
+			color = parse_rgb_to_hex(parts[1]);
+			if (color == 0)
+			{
+				free_split(parts);
+				return (-1);
+			}
+			tex->floor = color;
 		}
 		else if (ft_strcmp(parts[0], "C") == 0 && parts[1])
 		{
@@ -96,7 +103,13 @@ int	extract_colors(char **lines, t_tex *tex)
 				free_split(parts);
 				return (-1);
 			}
-			// TODO: Parse RGB e converter para hex
+			color = parse_rgb_to_hex(parts[1]);
+			if (color == 0)
+			{
+				free_split(parts);
+				return (-1);
+			}
+			tex->ceiling = color;
 		}
 		free_split(parts);
 		i++;
@@ -107,10 +120,12 @@ int	extract_colors(char **lines, t_tex *tex)
 
 int	extract_map(char **lines, int start_line, t_map *map)
 {
-	int	i;
-	int	height;
-	int	width;
-	int	max_width;
+	int		i;
+	int		height;
+	int		width;
+	int		max_width;
+	char	*cleaned;
+	int		len;
 
 	if (!lines || !map)
 		return (-1);
@@ -140,7 +155,14 @@ int	extract_map(char **lines, int start_line, t_map *map)
 	{
 		if (!is_empty_line(lines[start_line]))
 		{
-			map->grid[i] = ft_strdup(lines[start_line]);
+			cleaned = ft_strdup(lines[start_line]);
+			if (cleaned)
+			{
+				len = ft_strlen(cleaned);
+				if (len > 0 && cleaned[len - 1] == '\n')
+					cleaned[len - 1] = '\0';
+			}
+			map->grid[i] = cleaned;
 			i++;
 		}
 		start_line++;

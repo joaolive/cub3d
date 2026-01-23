@@ -1,78 +1,101 @@
 /* ************************************************************************** */
 /* */
+/* :::      ::::::::   */
 /* mock.c                                             :+:      :+:    :+:   */
-/* Inicializa dados falsos para teste de renderização e física.             */
+/* +:+ +:+         +:+     */
+/* By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
+/* +#+#+#+#+#+   +#+           */
+/* Created: 2026/01/21 12:00:00 by joaolive          #+#    #+#             */
+/* Updated: 2026/01/21 12:00:00 by joaolive         ###   ########.fr       */
 /* */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static char *mock_strdup(const char *s)
+// Helper para carregar textura e calcular as masks
+static void	load_texture(t_game *game, int idx, char *path)
 {
-    char    *d;
-    size_t  len;
+	mlx_texture_t	*tex;
 
-    len = ft_strlen(s);
-    d = malloc(len + 1);
-    if (!d)
-        return (NULL);
-    ft_strlcpy(d, s, len + 1);
-    return (d);
+	tex = mlx_load_png(path);
+	if (!tex)
+	{
+		fprintf(stderr, "Erro: Não foi possível carregar a textura: %s\n", path);
+		exit(EXIT_FAILURE);
+	}
+	game->tex.walls[idx].tex = tex;
+	// Otimização: Se a textura for potência de 2 (64, 128...),
+	// a mask é (tamanho - 1). Útil para o cálculo de textura wrapping.
+	game->tex.walls[idx].width_mask = tex->width - 1;
+	game->tex.walls[idx].height_mask = tex->height - 1;
 }
 
-void init_mock_map(t_game *game)
+static void	init_mock_textures(t_game *game)
 {
-    // --- 1. Dimensões do Mapa ---
-    game->map.width = 10;
-    game->map.height = 10;
+	// Caminhos sugeridos - altere conforme seus arquivos reais
+	load_texture(game, TEX_NORTH, "./assets/north.png");
+	load_texture(game, TEX_SOUTH, "./assets/south.png");
+	load_texture(game, TEX_WEST,  "./assets/west.png");
+	load_texture(game, TEX_EAST,  "./assets/east.png");
 
-    // --- 2. Alocação do Grid ---
-    game->map.grid = ft_calloc(game->map.height + 1, sizeof(char *));
-    if (!game->map.grid)
-        return ; // Tratar erro real em prod
+	// Cores em Hex (RRGGBBAA)
+	game->tex.ceiling = 0x87CEEBFF; // Azul céu
+	game->tex.floor = 0x228B22FF;   // Verde grama
+}
 
-    // --- 3. Preenchimento do Mapa (1=Parede, 0=Chão) ---
-    // Mapa fechado simples
-    game->map.grid[0] = mock_strdup("1111111111");
-    game->map.grid[1] = mock_strdup("1000000001");
-    game->map.grid[2] = mock_strdup("1000000001");
-    game->map.grid[3] = mock_strdup("1000000001");
-    game->map.grid[4] = mock_strdup("1000N00001"); // N = Player Start
-    game->map.grid[5] = mock_strdup("1000000001");
-    game->map.grid[6] = mock_strdup("1000000001");
-    game->map.grid[7] = mock_strdup("1001001001"); // Pilares para teste
-    game->map.grid[8] = mock_strdup("1000000001");
-    game->map.grid[9] = mock_strdup("1111111111");
+static void	init_mock_player(t_game *game)
+{
+	// Posição inicial (centro do quadrado livre no mapa abaixo)
+	game->player.pos_x = 3.5;
+	game->player.pos_y = 3.5;
 
-    // --- 4. Configuração do Player (Hardcoded para N) ---
-    // Posição: 4.5, 4.5 (Centro do bloco [4][4])
-    game->player.pos_x = 4.5;
-    game->player.pos_y = 4.5;
+	// Vetor de Direção: Olhando para Norte (assumindo Y para cima negativo)
+	// No cub3D, geralmente Y cresce para baixo, então Norte = (0, -1)
+	game->player.dir_x = 0.0;
+	game->player.dir_y = -1.0;
 
-    // Vetores para Norte (Y negativo na tela)
-    game->player.dir_x = 0.0;
-    game->player.dir_y = -1.0;
+	// Plano da Câmera: Perpendicular à direção
+	// Para FOV de ~66 graus, o plano deve ter comp ~0.66 da direção
+	game->player.plane_x = 0.66;
+	game->player.plane_y = 0.0;
+}
 
-    // Plano da câmera (Perpendicular à direção)
-    // Para FOV de 66 graus, o plano deve ser ~0.66 da direção
-    game->player.plane_x = 0.66;
-    game->player.plane_y = 0.0;
+static void	init_mock_grid(t_game *game)
+{
+	int		i;
 
-    game->player.mov_flags = 0; // Parado inicialmente
+	game->map.width = 8;
+	game->map.height = 8;
+	game->map.grid = ft_calloc(game->map.height + 1, sizeof(char *));
 
-    // --- 5. Cores (Hex RGBA) ---
-    // Teto: Azul Céu (Sky Blue)
-    game->tex.ceiling = 0x87CEEBFF;
+	// Mapa 8x8 fechado
+	// 1 = Parede, 0 = Chão
+	char *temp_map[] = {
+		"11111111",
+		"10101001",
+		"10101001",
+		"100N0001",
+		"10000001",
+		"10001001",
+		"10000001",
+		"11111111",
+		NULL
+	};
 
-    // Chão: Verde Grama (Forest Green)
-    game->tex.floor = 0x228B22FF;
+	i = 0;
+	while (i < game->map.height)
+	{
+		game->map.grid[i] = ft_strdup(temp_map[i]);
+		i++;
+	}
+}
 
-    // --- 6. Texturas (NULL por enquanto) ---
-    // Importante zerar para não dar segfault se tentar acessar antes de carregar
-    game->tex.walls[TEX_NORTH].tex = NULL;
-    game->tex.walls[TEX_SOUTH].tex = NULL;
-    game->tex.walls[TEX_EAST].tex = NULL;
-    game->tex.walls[TEX_WEST].tex = NULL;
+void	init_mock_map(t_game *game)
+{
+	init_mock_grid(game);
+	init_mock_player(game);
+	init_mock_textures(game);
 
-    printf("Mock Map Loaded! Player at [%f, %f]\n", game->player.pos_x, game->player.pos_y);
+	// Inicialização de flags e variáveis de controle
+	game->player.mov_flags = 0;
 }

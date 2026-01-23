@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   raycast.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/05 14:27:59 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/21 17:43:45 by joaolive         ###   ########.fr       */
+/*   Created: 2026/01/11 16:37:07 by joaolive          #+#    #+#             */
+/*   Updated: 2026/01/23 18:28:27 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int main(void)
+void	raycast(t_game *game)
 {
-	t_game	game;
-	ft_bzero(&game, sizeof(t_game));
-	init_mock_map(&game); // mapa mockado
-	if (init_graphics(&game))
-		return (1);
-	mlx_key_hook(game.mlx, &key_handler, &game);
-	mlx_loop_hook(game.mlx, &game_loop, &game);
-	mlx_loop(game.mlx);
-	// terminate(game); // TODO
-	return (0);
+	int		x;
+
+	x = 0;
+	while (x < game->mlx->width)
+	{
+		// calcula os dados para 8 raios
+		calculate_batch(game, x);
+		// desenha os 8 raios baseados nos dados calculados
+		render_batch(game, x);
+		//avança o bloco
+		x += BATCH_SIZE;
+	}
 }

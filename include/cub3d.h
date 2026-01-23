@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 13:45:39 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/11 15:48:49 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/01/23 15:57:08 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,9 @@
 #define WIN_HEIGHT 720
 #define WIN_TITLE "Cub3d"
 
+// Tamanho do bloco
+#define BATCH_SIZE 8
+
 // --- BITMASKS DE MOVIMENTO ---
 #define FLAG_MOVE_W (1 << 0) // 0000 0001
 #define FLAG_MOVE_S (1 << 1) // 0000 0010
@@ -36,6 +39,7 @@
 #define TEX_WEST 1
 #define TEX_NORTH 2
 #define TEX_SOUTH 3
+#define TEX_VOID 255
 
 typedef struct s_keymap
 {
@@ -79,6 +83,17 @@ typedef struct s_tex
 	uint32_t	ceiling; // RGBA hex
 }	t_tex;
 
+typedef struct	s_batch
+{
+	float		step[BATCH_SIZE];
+	float		tex_pos[BATCH_SIZE];
+	float		dist[BATCH_SIZE];
+	int32_t		draw_start[BATCH_SIZE];
+	int32_t		draw_end[BATCH_SIZE];
+	uint16_t	tex_x[BATCH_SIZE];
+	uint8_t		tex_id[BATCH_SIZE];
+}	t_batch;
+
 typedef struct s_ray
 {
 	double	camera_x;
@@ -95,6 +110,7 @@ typedef struct s_ray
 	int		step_x;
 	int		step_y;
 	int		side; // 0 = vertical, 1 = horizontal
+	int		hit_type; // 0 = parede, -1 fora do mapa;
 	int		line_height;
 	int		draw_start;
 	int		draw_end;
@@ -107,6 +123,7 @@ typedef struct s_game
 	t_map		map;
 	t_player	player;
 	t_tex		tex;
+	t_batch		batch;
 	t_ray		ray;
 	double		delta_time;
 }	t_game;
@@ -117,6 +134,12 @@ void	game_loop(void *param);
 
 // render
 void	render_bg(t_game *game);
+
+//raycast
+void	raycast(t_game *game);
+void	render_batch(t_game *game, int32_t start_x);
+void	calculate_batch(t_game *game, int32_t start_x);
+
 
 // input
 void	key_handler(mlx_key_data_t key, void *param);

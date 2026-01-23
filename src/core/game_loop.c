@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/11 10:01:18 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/21 14:09:36 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/01/23 19:31:22 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	game_loop(void *param)
 	t_game	*game;
 
 	game = (t_game *) param;
+	hook_player(game);
 	render_bg(game);
 	raycast(game);
 }

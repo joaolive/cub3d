@@ -6,7 +6,7 @@
 #    By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/06 05:55:59 by joaolive          #+#    #+#              #
-#    Updated: 2026/01/22 17:44:42 by joaolive         ###   ########.fr        #
+#    Updated: 2026/01/23 20:29:25 by joaolive         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ SRC_MAIN = main mock_map
 SRC_CORE = init_graphics game_loop
 SRC_RENDER = render_bg
 SRC_RAYCAST = raycast calculate_batch render_batch
-SRC_INPUTS = key_handler player_controls
+SRC_INPUTS = key_handler player_controls hook_player
 
 # Source files
 SRC = \

@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 13:45:39 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/23 15:57:08 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/01/23 20:29:09 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,11 +140,9 @@ void	raycast(t_game *game);
 void	render_batch(t_game *game, int32_t start_x);
 void	calculate_batch(t_game *game, int32_t start_x);
 
-
 // input
 void	key_handler(mlx_key_data_t key, void *param);
 void	player_controls(mlx_key_data_t key, t_game *game);
-
+void	hook_player(t_game *game);
 // mock
 void init_mock_map(t_game *game);
-

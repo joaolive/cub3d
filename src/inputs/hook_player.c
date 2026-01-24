@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 19:25:21 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/23 20:31:47 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/01/24 17:52:06 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,21 +47,22 @@ static void	move_player(t_player *player, t_map *map, double move_x, double move
 
 void	hook_player(t_game *game)
 {
-	double	mov_speed;
-	double	rot_speed;
+	double	speed;
+	int		fwd;
+	int		side;
+	int		rot;
 
-	mov_speed = game->mlx->delta_time * 3.0; // ajustar valor para mudar a velocidade
-	rot_speed = game->mlx->delta_time * 2.0;
-	if (game->player.mov_flags & FLAG_ROT_R)
-		rotate_player(&game->player, rot_speed);
-	if (game->player.mov_flags & FLAG_ROT_L)
-		rotate_player(&game->player, -rot_speed); // sentido antihorário
-	if (game->player.mov_flags & FLAG_MOVE_W)
-		move_player(&game->player, &game->map, game->player.dir_x * mov_speed, game->player.dir_y * mov_speed);
-	if (game->player.mov_flags & FLAG_MOVE_S)
-		move_player(&game->player, &game->map, -game->player.dir_x * mov_speed, -game->player.dir_y * mov_speed);
-	if (game->player.mov_flags & FLAG_MOVE_A) // (dir_y)(-dir_x)
-		move_player(&game->player, &game->map, game->player.dir_y * mov_speed, -game->player.dir_x * mov_speed);
-	if (game->player.mov_flags & FLAG_MOVE_D) // (-dir_y)(dir_x)
-		move_player(&game->player, &game->map, -game->player.dir_y * mov_speed, game->player.dir_x * mov_speed);
+	speed = game->mlx->delta_time * 3.0;
+	fwd = (!!(game->player.mov_flags & FLAG_MOVE_W))
+		- (!!(game->player.mov_flags & FLAG_MOVE_S));
+	side = (!!(game->player.mov_flags & FLAG_MOVE_D))
+		- (!!(game->player.mov_flags & FLAG_MOVE_A));
+	speed *= (1.0 - (0.292893 * ((fwd != 0) & (side != 0))));
+	move_player(&game->player, &game->map,
+		((game->player.dir_x * fwd) - (game->player.dir_y * side)) * speed,
+		((game->player.dir_y * fwd) + (game->player.dir_x * side)) * speed);
+	rot = (!!(game->player.mov_flags & FLAG_ROT_R))
+		- (!!(game->player.mov_flags & FLAG_ROT_L));
+	if (rot)
+		rotate_player(&game->player, rot * game->mlx->delta_time * 3.0);
 }

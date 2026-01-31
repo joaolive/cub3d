@@ -1,29 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   apply_depth_shading.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/11 16:37:07 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/31 11:29:37 by joaolive         ###   ########.fr       */
+/*   Created: 2026/01/31 13:12:19 by joaolive          #+#    #+#             */
+/*   Updated: 2026/01/31 15:18:58 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	raycast(t_game *game)
+// (1.0 - (dist - start) / (end - start)) * 256
+uint32_t	apply_depth_shading(uint32_t rgba, float dist)
 {
-	int		x;
+	const float	fog_start = 2.0f;
+	const float	fog_end = 15.0f;
+	uint32_t	factor;
 
-	x = 0;
-	while (x < game->mlx->width)
-	{
-		// calcula os dados para 8 raios
-		calculate_batch(game, x);
-		// desenha os 8 raios baseados nos dados calculados
-		render_batch(game, x, -1);
-		//avança o bloco
-		x += BATCH_SIZE;
-	}
+	if (dist <= fog_start)
+		return (rgba);
+	if (dist >= fog_end)
+		return (0x000000);
+	factor = (uint32_t)((1.0f - (dist - fog_start)
+		/ (fog_end - fog_start)) * 256.0f);
+	return (lerp(rgba, 0x000000, factor));
 }

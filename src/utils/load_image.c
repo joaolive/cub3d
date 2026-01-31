@@ -1,29 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   load_image.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/11 16:37:07 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/31 11:29:37 by joaolive         ###   ########.fr       */
+/*   Created: 2026/01/25 09:46:23 by joaolive          #+#    #+#             */
+/*   Updated: 2026/01/31 18:38:22 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	raycast(t_game *game)
+mlx_image_t	*load_image(mlx_t *mlx, char *path)
 {
-	int		x;
+	mlx_texture_t	*texture;
+	mlx_image_t		*image;
 
-	x = 0;
-	while (x < game->mlx->width)
+	texture = mlx_load_png(path);
+	if (!texture)
+		return (NULL);
+	image = mlx_texture_to_image(mlx, texture);
+	mlx_delete_texture(texture);
+	if (!image)
+		return (NULL);
+	if (!mlx_resize_image(image, 512, 512))
 	{
-		// calcula os dados para 8 raios
-		calculate_batch(game, x);
-		// desenha os 8 raios baseados nos dados calculados
-		render_batch(game, x, -1);
-		//avança o bloco
-		x += BATCH_SIZE;
+		mlx_delete_image(mlx, image);
+		return (NULL);
 	}
+	return (image);
 }

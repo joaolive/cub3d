@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 14:00:00 by joaolive          #+#    #+#             */
-/*   Updated: 2025/11/15 16:03:54 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/01/31 09:57:28 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,28 @@ typedef struct s_dlist
 	size_t	size;
 }	t_dlist;
 
+typedef struct s_hnode
+{
+	const char		*key;
+	void			*value;
+	struct s_hnode	*next;
+}	t_hnode;
+
+typedef struct s_htable
+{
+	t_hnode		**buckets;
+	size_t		size;
+	size_t		count;
+}	t_htab;
+
+
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);
 int		ft_isascii(int c);
 int		ft_isprint(int c);
 int		ft_isspace(int c);
+int		ft_isprime(size_t c);
 int		ft_is_numeric(char *str);
 size_t	ft_strlen(const char *s);
 void	*ft_memset(void *s, int c, size_t size);
@@ -151,5 +167,16 @@ int		ft_print_chex(va_list args);
 int		ft_print_ptr(va_list args);
 int		ft_print_percent(va_list args);
 int		ft_puthex(unsigned long long num, size_t size_in_bytes, char specifier);
+
+size_t	ft_djb2(const char *str);
+t_hnode	*ft_hnodedetach(t_hnode **node);
+t_hnode	*ft_hnodenew(const char *key, void *value);
+int		ft_htabresize(t_htab *tab, size_t new_size);
+void	ft_tabdestroy(t_htab **table, void (*del)(void *));
+void	*ft_tabget(t_htab *table, const char *key);
+t_htab	*ft_tabinit(size_t size);
+int		ft_htabinsert(t_htab *tab, const char *key, void *value);
+void	ft_tabclear(t_htab *table, void (*del)(void *));
+void	ft_tabdelone(t_hnode *node, void (*del)(void *));
 
 #endif

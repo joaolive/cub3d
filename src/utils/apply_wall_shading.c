@@ -1,29 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   apply_wall_shading.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/11 16:37:07 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/31 11:29:37 by joaolive         ###   ########.fr       */
+/*   Created: 2026/01/28 18:31:08 by joaolive          #+#    #+#             */
+/*   Updated: 2026/01/31 14:43:04 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	raycast(t_game *game)
+uint32_t	apply_wall_shading(uint32_t rgba)
 {
-	int		x;
+	t_rgba	c;
 
-	x = 0;
-	while (x < game->mlx->width)
-	{
-		// calcula os dados para 8 raios
-		calculate_batch(game, x);
-		// desenha os 8 raios baseados nos dados calculados
-		render_batch(game, x, -1);
-		//avança o bloco
-		x += BATCH_SIZE;
-	}
+	c.r = (((rgba >> 24) & 0xFF) * 3) >> 2;
+	c.g = (((rgba >> 16) & 0xFF) * 3) >> 2;
+	c.b = (((rgba >> 8) & 0xFF) * 3) >> 2;
+	c.a = ((rgba >> 0) & 0xFF);
+	return ((c.r << 24) | (c.g << 16) | (c.b << 8) | c.a);
 }

@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/23 19:25:21 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/24 17:52:06 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/01/31 09:33:02 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,30 +19,28 @@ static void	rotate_player(t_player *player, double rot_speed)
 	double	old_plane_x;
 
 	// rotacionando a direção
-	old_dir_x = player->dir_x;
-	player->dir_x = player->dir_x * cos(rot_speed) - player->dir_y * sin(rot_speed);
-	player->dir_y = old_dir_x * sin(rot_speed) + player->dir_y * cos(rot_speed);
+	old_dir_x = player->dir.x;
+	player->dir.x = player->dir.x * cos(rot_speed) - player->dir.y * sin(rot_speed);
+	player->dir.y = old_dir_x * sin(rot_speed) + player->dir.y * cos(rot_speed);
 	// rotacionando o plano da câmera (plane)
-	old_plane_x = player->plane_x;
-	player->plane_x = player->plane_x * cos(rot_speed) - player->plane_y * sin(rot_speed);
-	player->plane_y = old_plane_x * sin(rot_speed) + player->plane_y * cos(rot_speed);
+	old_plane_x = player->plane.x;
+	player->plane.x = player->plane.x * cos(rot_speed) - player->plane.y * sin(rot_speed);
+	player->plane.y = old_plane_x * sin(rot_speed) + player->plane.y * cos(rot_speed);
 }
 
 static void	move_player(t_player *player, t_map *map, double move_x, double move_y)
 {
-	int	map_grid_x;
-	int	map_grid_y;
-	int	new_pos_x;
-	int	new_pos_y;
+	t_ivec	map_grid;
+	t_ivec	new_pos;
 
-	new_pos_x = (int)(player->pos_x + move_x);
-	map_grid_y = (int)player->pos_y;
-	if (map->grid[map_grid_y][new_pos_x] != '1') //TODO depois tenho que alterar para aceitar outros obstáculos
-		player->pos_x += move_x;
-	new_pos_y = (int)(player->pos_y + move_y);
-	map_grid_x = (int)player->pos_x;
-	if (map->grid[new_pos_y][map_grid_x] != '1') //TODO mesma coisa do outro
-		player->pos_y += move_y;
+	new_pos.x = (int)(player->pos.x + move_x);
+	map_grid.y = (int)player->pos.y;
+	if (map->grid[map_grid.y][new_pos.x] != '1') //TODO depois tenho que alterar para aceitar outros obstáculos
+		player->pos.x += move_x;
+	new_pos.y = (int)(player->pos.y + move_y);
+	map_grid.x = (int)player->pos.x;
+	if (map->grid[new_pos.y][map_grid.x] != '1') //TODO mesma coisa do outro
+		player->pos.y += move_y;
 }
 
 void	hook_player(t_game *game)
@@ -59,8 +57,8 @@ void	hook_player(t_game *game)
 		- (!!(game->player.mov_flags & FLAG_MOVE_A));
 	speed *= (1.0 - (0.292893 * ((fwd != 0) & (side != 0))));
 	move_player(&game->player, &game->map,
-		((game->player.dir_x * fwd) - (game->player.dir_y * side)) * speed,
-		((game->player.dir_y * fwd) + (game->player.dir_x * side)) * speed);
+		((game->player.dir.x * fwd) - (game->player.dir.y * side)) * speed,
+		((game->player.dir.y * fwd) + (game->player.dir.x * side)) * speed);
 	rot = (!!(game->player.mov_flags & FLAG_ROT_R))
 		- (!!(game->player.mov_flags & FLAG_ROT_L));
 	if (rot)

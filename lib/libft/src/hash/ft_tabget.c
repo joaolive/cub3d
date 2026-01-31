@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   ft_tabget.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/11 16:37:07 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/31 11:29:37 by joaolive         ###   ########.fr       */
+/*   Created: 2026/01/28 08:20:21 by joaolive          #+#    #+#             */
+/*   Updated: 2026/01/28 08:30:40 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "libft.h"
 
-void	raycast(t_game *game)
+void	*ft_tabget(t_htab *table, const char *key)
 {
-	int		x;
+	size_t	i;
+	t_hnode	*current;
 
-	x = 0;
-	while (x < game->mlx->width)
+	if (!table || !table->buckets || !key)
+		return (NULL);
+	i = ft_djb2(key) % table->size;
+	current = table->buckets[i];
+	while (current)
 	{
-		// calcula os dados para 8 raios
-		calculate_batch(game, x);
-		// desenha os 8 raios baseados nos dados calculados
-		render_batch(game, x, -1);
-		//avança o bloco
-		x += BATCH_SIZE;
+		if (ft_strcmp((char *)current->key, (char *)key) == 0)
+			return (current->value);
+		current = current->next;
 	}
+	return (NULL);
 }

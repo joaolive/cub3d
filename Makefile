@@ -6,7 +6,7 @@
 #    By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/06 05:55:59 by joaolive          #+#    #+#              #
-#    Updated: 2026/01/23 20:29:25 by joaolive         ###   ########.fr        #
+#    Updated: 2026/01/31 18:31:25 by joaolive         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,18 +55,20 @@ LDFLAGS = -L$(LIBFT_DIR) -L$(MLX_BUILD)
 LDLIBS = -lft -lmlx42 -lglfw -lpng16 -ldl -pthread -lm
 
 SRC_MAIN = main mock_map
-SRC_CORE = init_graphics game_loop
-SRC_RENDER = render_bg
-SRC_RAYCAST = raycast calculate_batch render_batch
+SRC_CORE = init_window game_loop
+SRC_RAYCAST = raycast calculate_batch render_batch render_bg
 SRC_INPUTS = key_handler player_controls hook_player
+SRC_PLAYER = render_player
+SRC_UTILS = apply_wall_shading apply_depth_shading lerp load_image
 
 # Source files
 SRC = \
 	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(SRC_MAIN))) \
 	$(addprefix $(SRC_DIR)/core/, $(addsuffix .c, $(SRC_CORE))) \
-	$(addprefix $(SRC_DIR)/render/, $(addsuffix .c, $(SRC_RENDER))) \
 	$(addprefix $(SRC_DIR)/raycast/, $(addsuffix .c, $(SRC_RAYCAST))) \
-	$(addprefix $(SRC_DIR)/inputs/, $(addsuffix .c, $(SRC_INPUTS)))
+	$(addprefix $(SRC_DIR)/inputs/, $(addsuffix .c, $(SRC_INPUTS))) \
+	$(addprefix $(SRC_DIR)/player/, $(addsuffix .c, $(SRC_PLAYER))) \
+	$(addprefix $(SRC_DIR)/utils/, $(addsuffix .c, $(SRC_UTILS)))
 
 # Object files
 SRC_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))

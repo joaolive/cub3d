@@ -1,29 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   ft_hnodedetach.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/11 16:37:07 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/31 11:29:37 by joaolive         ###   ########.fr       */
+/*   Created: 2026/01/27 11:31:37 by joaolive          #+#    #+#             */
+/*   Updated: 2026/01/27 17:53:02 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "libft.h"
 
-void	raycast(t_game *game)
+t_hnode	*ft_hnodedetach(t_hnode **node)
 {
-	int		x;
+	t_hnode	*target;
 
-	x = 0;
-	while (x < game->mlx->width)
-	{
-		// calcula os dados para 8 raios
-		calculate_batch(game, x);
-		// desenha os 8 raios baseados nos dados calculados
-		render_batch(game, x, -1);
-		//avança o bloco
-		x += BATCH_SIZE;
-	}
+	if (!node || !*node)
+		return (NULL);
+	target = *node;
+	*node = target->next;
+	target->next = NULL;
+	return (target);
 }

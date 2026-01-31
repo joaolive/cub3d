@@ -1,29 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   ft_tabdestroy.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/11 16:37:07 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/31 11:29:37 by joaolive         ###   ########.fr       */
+/*   Created: 2026/01/27 17:59:36 by joaolive          #+#    #+#             */
+/*   Updated: 2026/01/28 08:30:40 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "libft.h"
 
-void	raycast(t_game *game)
+void	ft_tabdestroy(t_htab **table, void (*del)(void *))
 {
-	int		x;
-
-	x = 0;
-	while (x < game->mlx->width)
-	{
-		// calcula os dados para 8 raios
-		calculate_batch(game, x);
-		// desenha os 8 raios baseados nos dados calculados
-		render_batch(game, x, -1);
-		//avança o bloco
-		x += BATCH_SIZE;
-	}
+	if (!table || !*table)
+		return ;
+	ft_tabclear(*table, del);
+	if ((*table)->buckets)
+		free((*table)->buckets);
+	free(*table);
+	*table = NULL;
 }

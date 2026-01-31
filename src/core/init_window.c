@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_graphics.c                                    :+:      :+:    :+:   */
+/*   init_window.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/07 16:17:53 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/11 10:17:03 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/01/31 18:00:11 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	init_graphics(t_game *game)
+int	init_window(t_game *game)
 {
 	game->mlx = mlx_init(WIN_WIDTH, WIN_HEIGHT, WIN_TITLE, 0);
 	if (!game->mlx)

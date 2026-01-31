@@ -6,7 +6,7 @@
 #    By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/31 09:06:36 by joaolive          #+#    #+#              #
-#    Updated: 2025/11/10 15:46:12 by joaolive         ###   ########.fr        #
+#    Updated: 2026/01/31 09:56:44 by joaolive         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ CORE_NAMES = $(addsuffix .c, \
 			ft_isascii \
 			ft_isprint \
 			ft_isspace \
+			ft_isprime \
 			ft_is_numeric \
 			ft_strlen \
 			ft_memset \
@@ -134,12 +135,25 @@ PRINTF_NAMES = $(addsuffix .c, \
 			ft_print_percent \
 			ft_puthex)
 
+HASH_NAMES = $(addsuffix .c, \
+			ft_djb2 \
+			ft_hnodedetach \
+			ft_hnodenew \
+			ft_htabresize \
+			ft_tabdestroy \
+			ft_tabget \
+			ft_htabinsert \
+			ft_tabclear \
+			ft_tabdelone \
+			ft_tabinit)
+
 # Source files
 CORE_SRCS = $(addprefix $(SRC_DIR)/core/, $(CORE_NAMES))
 LST_SRCS = $(addprefix $(SRC_DIR)/lst/, $(LST_NAMES))
 DLST_SRCS = $(addprefix $(SRC_DIR)/dlst/, $(DLST_NAMES))
 GNL_SRCS = $(addprefix $(SRC_DIR)/gnl/, $(GNL_NAMES))
 PRINTF_SRCS = $(addprefix $(SRC_DIR)/printf/, $(PRINTF_NAMES))
+HASH_SRCS = $(addprefix $(SRC_DIR)/hash/, $(HASH_NAMES))
 
 # Object files
 CORE_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(CORE_SRCS))
@@ -147,9 +161,10 @@ LST_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(LST_SRCS))
 DLST_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(DLST_SRCS))
 GNL_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(GNL_SRCS))
 PRINTF_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(PRINTF_SRCS))
+HASH_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(HASH_SRCS))
 
 # Dependencies
-ALL_OBJS = $(CORE_OBJS) $(LST_OBJS) $(DLST_OBJS) $(GNL_OBJS) $(PRINTF_OBJS)
+ALL_OBJS = $(CORE_OBJS) $(LST_OBJS) $(DLST_OBJS) $(GNL_OBJS) $(PRINTF_OBJS) $(HASH_OBJS)
 DEPS = $(ALL_OBJS:.o=.d)
 
 all:

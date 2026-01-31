@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 13:45:39 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/23 20:29:09 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/01/31 18:31:17 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,26 +47,41 @@ typedef struct s_keymap
 	uint8_t	value;
 }	t_keymap;
 
+typedef struct s_rgba
+{
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
+	uint8_t	a;
+}	t_rgba;
+
+typedef struct s_vec
+{
+	double	x;
+	double	y;
+}	t_vec;
+
+typedef struct s_ivec
+{
+	int32_t	x;
+	int32_t	y;
+}	t_ivec;
+
 typedef struct s_player
 {
-	double	pos_x;
-	double	pos_y;
-	double	dir_x;
-	double	dir_y;
-	double	plane_x;
-	double	plane_y;
-	int		pitch;
-	uint8_t	mov_flags;
+	mlx_image_t	*img;
+	t_vec		pos;
+	t_vec		dir;
+	t_vec		plane;
+	// int32_t		pitch;
+	uint8_t		mov_flags;
 }	t_player;
 
 typedef struct s_map
 {
-	char	**grid;
-	int		width;
-	int		height;
-	int		px;
-	int		py;
-	char	pdir;
+	char		**grid;
+	int32_t		width;
+	int32_t		height;
 }	t_map;
 
 typedef struct s_wall_tex
@@ -75,13 +90,6 @@ typedef struct s_wall_tex
 	uint32_t		width_mask; // se width é 64, mask é 63
 	uint32_t		height_mask;
 }	t_wall_tex;
-
-typedef struct s_tex
-{
-	t_wall_tex	walls[4]; // [0]=N, [1]=S, [2]=W, [3]=E
-	uint32_t	floor; // RGBA hex
-	uint32_t	ceiling; // RGBA hex
-}	t_tex;
 
 typedef struct	s_batch
 {
@@ -92,57 +100,62 @@ typedef struct	s_batch
 	int32_t		draw_end[BATCH_SIZE];
 	uint16_t	tex_x[BATCH_SIZE];
 	uint8_t		tex_id[BATCH_SIZE];
+	uint8_t		is_shaded[BATCH_SIZE];
 }	t_batch;
 
 typedef struct s_ray
 {
-	double	camera_x;
-	double	ray_dir_x;
-	double	ray_dir_y;
-	double	side_dist_x;
-	double	side_dist_y;
-	double	delta_dist_x;
-	double	delta_dist_y;
-	double	perp_wall_dist;
-	double	wall_x; // ponto exato onde o raio bateu na parede (0 a 1)
-	int		map_x;
-	int		map_y;
-	int		step_x;
-	int		step_y;
-	int		side; // 0 = vertical, 1 = horizontal
-	int		hit_type; // 0 = parede, -1 fora do mapa;
-	int		line_height;
-	int		draw_start;
-	int		draw_end;
+	t_vec		dir;
+	t_vec		side_dist;
+	t_vec		delta_dist;
+	t_ivec		map;
+	t_ivec		step;
+	double		perp_dist;
+	double		wall_x; // ponto exato onde o raio bateu na parede (0 a 1)
+	int32_t		line_height;
+	uint8_t		side; // 0 = vertical, 1 = horizontal
 }	t_ray;
 
 typedef struct s_game
 {
 	mlx_t		*mlx;
 	mlx_image_t	*img;
+	t_htab		*assets;
 	t_map		map;
 	t_player	player;
-	t_tex		tex;
 	t_batch		batch;
 	t_ray		ray;
+	t_wall_tex	walls[4]; // [0]=N, [1]=S, [2]=W, [3]=E
 	double		delta_time;
+	uint32_t	floor; // RGBA hex
+	uint32_t	ceiling; // RGBA hex
 }	t_game;
 
 // core
-int	init_graphics(t_game *game);
-void	game_loop(void *param);
+int			init_window(t_game *game);
+void		game_loop(void *param);
 
 // render
-void	render_bg(t_game *game);
+void		render_bg(t_game *game);
 
 //raycast
-void	raycast(t_game *game);
-void	render_batch(t_game *game, int32_t start_x);
-void	calculate_batch(t_game *game, int32_t start_x);
+void		raycast(t_game *game);
+void		render_batch(t_game *game, int32_t start_x, int32_t i);
+void		calculate_batch(t_game *game, int32_t start_x);
 
 // input
-void	key_handler(mlx_key_data_t key, void *param);
-void	player_controls(mlx_key_data_t key, t_game *game);
-void	hook_player(t_game *game);
+void		key_handler(mlx_key_data_t key, void *param);
+void		player_controls(mlx_key_data_t key, t_game *game);
+void		hook_player(t_game *game);
+
+// player
+void		render_player(t_game *game);
+
+// utils
+mlx_image_t	*load_image(mlx_t *mlx, char *path);
+uint32_t	apply_depth_shading(uint32_t rgba, float dist);
+uint32_t	apply_wall_shading(uint32_t rgba);
+uint32_t	lerp(uint32_t color, uint32_t fog_color, uint32_t t);
+
 // mock
-void init_mock_map(t_game *game);
+void		init_mock_map(t_game *game);

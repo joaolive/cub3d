@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycast.c                                          :+:      :+:    :+:   */
+/*   ft_isprime.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/11 16:37:07 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/31 11:29:37 by joaolive         ###   ########.fr       */
+/*   Created: 2026/01/28 08:38:56 by joaolive          #+#    #+#             */
+/*   Updated: 2026/01/28 09:07:30 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "libft.h"
 
-void	raycast(t_game *game)
+int	ft_isprime(size_t c)
 {
-	int		x;
+	size_t	i;
 
-	x = 0;
-	while (x < game->mlx->width)
+	if (c <= 3)
+		return (c > 1);
+	if (c % 2 == 0 || c % 3 == 0)
+		return (0);
+	i = 5;
+	while (i <= c / i)
 	{
-		// calcula os dados para 8 raios
-		calculate_batch(game, x);
-		// desenha os 8 raios baseados nos dados calculados
-		render_batch(game, x, -1);
-		//avança o bloco
-		x += BATCH_SIZE;
+		if (c % i == 0 || c % (i + 2) == 0)
+			return (0);
+		i += 6;
 	}
+	return (1);
 }

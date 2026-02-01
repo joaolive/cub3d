@@ -12,11 +12,18 @@
 
 #include "cub3d.h"
 
-int main(void)
+int main(int argc, char **argv)
 {
 	t_game	game;
+
+	if (argc != 2)
+	{
+		ft_putstr_fd("Error\nUsage: ./cub3d <map.cub>\n", 2);
+		return (1);
+	}
 	ft_bzero(&game, sizeof(t_game));
-	init_mock_map(&game); // mapa mockado
+	if (parse_map_file(argv[1], &game))
+		return (1);
 	if (init_window(&game))
 		return (1);
 

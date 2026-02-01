@@ -1,12 +1,13 @@
-NO ./assets/textures/north.png
-SO ./assets/textures/south.png
-WE ./assets/textures/west.png
-EA ./assets/textures/east.png
+NO ./assets/wall/north.png
+SO ./assets/wall/south.png
+WE ./assets/wall/west.png
+EA ./assets/wall/east.png
+
 F 220,100,0
 C 225,30,0
 
 1111111111
-1000000001
+10000N0001
 1010001001
-1001N00101
+1001000101
 1111111111

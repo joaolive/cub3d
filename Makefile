@@ -60,7 +60,7 @@ SRC_RAYCAST = raycast calculate_batch render_batch render_bg
 SRC_INPUTS = key_handler player_controls hook_player
 SRC_PLAYER = render_player
 SRC_UTILS = apply_wall_shading apply_depth_shading lerp load_image
-SRC_PARSING = parser parse_utils validators map_validators extractors color_parser
+SRC_PARSING = parser parse_utils map_validators
 
 # Source files
 SRC = \

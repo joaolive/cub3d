@@ -36,35 +36,50 @@ int	is_empty_line(const char *line)
 char	**read_file_to_array(const char *filename)
 {
 	int		fd;
-	char	*line;
 	char	**result;
-	int		count;
+    int     status;
 
 	if (!filename)
 		return (NULL);
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		return (NULL);
-	result = ft_calloc(1000, sizeof(char *));
-	if (!result)
-	{
-		close(fd);
-		return (NULL);
-	}
-	count = 0;
-	while (1)
-	{
-		line = ft_get_next_line(fd);
-		if (!line)
-			break ;
-		result[count] = line;
-		count++;
-		if (count >= 999)
-			break ;
-	}
-	result[count] = NULL;
-	close(fd);
+    result = NULL;
+    status = read_lines_into_array(fd, &result);
+    if (status == -1)
+    {
+        return (NULL);
+    }
 	return (result);
+}
+
+static int read_lines_into_array(int fd, char ***result_ptr)
+{
+    char    *line;
+    char    **result;
+    int     count;
+
+    result = ft_calloc(1000, sizeof(char *));
+    if (!result)
+    {
+        close(fd);
+        return (-1);
+    }
+    count = 0;
+    while (1)
+    {
+        line = ft_get_next_line(fd);
+        if (!line)
+            break ;
+        result[count] = line;
+        count++;
+        if (count >= 999)
+            break ;
+    }
+    result[count] = NULL;
+    close(fd);
+    *result_ptr = result;
+    return (0);
 }
 
 void	free_file_array(char **arr)
@@ -101,26 +116,19 @@ uint32_t	parse_rgb_to_hex(const char *rgb_str)
 	int		g;
 	int		b;
 	uint32_t	result;
-	int		i;
 
 	if (!rgb_str)
 		return (0xFFFFFFFF);
 	tmp = ft_split(rgb_str, ',');
 	if (!tmp || !tmp[0] || !tmp[1] || !tmp[2])
 	{
-		i = 0;
-		while (tmp && tmp[i])
-			free(tmp[i++]);
-		free(tmp);
+		free_file_array(tmp);
 		return (0xFFFFFFFF);
 	}
 	r = ft_atoi(tmp[0]);
 	g = ft_atoi(tmp[1]);
 	b = ft_atoi(tmp[2]);
-	i = 0;
-	while (tmp && tmp[i])
-		free(tmp[i++]);
-	free(tmp);
+	free_file_array(tmp);
 	if (validate_rgb_values(r, g, b) != 0)
 		return (0xFFFFFFFF);
 	result = (r << 24) | (g << 16) | (b << 8) | 0xFF;
@@ -171,47 +179,65 @@ int	validate_rgb_values(int r, int g, int b)
 	return (0);
 }
 
-int	extract_map(char **lines, int start_line, t_map *map)
+static int calculate_map_dimensions(char **lines, int start_line, \
+	int *height_ptr, int *max_width_ptr)
 {
-	int	i;
-	int	width;
-	int	max_width;
-	int	height;
-	int	len;
+    int i;
+    int width;
+    int current_max_width;
+    int current_height;
 
-	if (!lines || !map)
-		return (-1);
-	height = 0;
-	max_width = 0;
-	i = start_line;
-	while (lines[i])
-	{
-		width = ft_strlen(lines[i]);
-		if (width > 0 && lines[i][width - 1] == '\n')
-			width--;
-		if (width > max_width)
-			max_width = width;
-		height++;
-		i++;
-	}
-	map->width = max_width;
-	map->height = height;
-	map->grid = ft_calloc(height + 1, sizeof(char *));
-	if (!map->grid)
-		return (-1);
-	i = 0;
-	while (i < height)
-	{
-		map->grid[i] = ft_strdup(lines[start_line + i]);
-		if (map->grid[i])
-		{
-			len = ft_strlen(map->grid[i]);
-			if (len > 0 && map->grid[i][len - 1] == '\n')
-				map->grid[i][len - 1] = '\0';
-		}
-		i++;
-	}
-	map->grid[i] = NULL;
-	return (0);
+    if (!lines || !height_ptr || !max_width_ptr)
+        return (-1);
+    current_height = 0;
+    current_max_width = 0;
+    i = start_line;
+    while (lines[i])
+    {
+        width = ft_strlen(lines[i]);
+        if (width > 0 && lines[i][width - 1] == '\n')
+            width--;
+        if (width > current_max_width)
+            current_max_width = width;
+        current_height++;
+        i++;
+    }
+    *height_ptr = current_height;
+    *max_width_ptr = current_max_width;
+    return (0);
 }
 
+static int allocate_and_fill_grid(char **lines, int start_line, t_map *map)
+{
+    int i;
+    int len;
+
+    map->grid = ft_calloc(map->height + 1, sizeof(char *));
+    if (!map->grid)
+        return (-1);
+    i = 0;
+    while (i < map->height)
+    {
+        map->grid[i] = ft_strdup(lines[start_line + i]);
+        if (map->grid[i])
+        {
+            len = ft_strlen(map->grid[i]);
+            if (len > 0 && map->grid[i][len - 1] == '\n')
+                map->grid[i][len - 1] = '\0';
+        }
+        i++;
+    }
+    map->grid[i] = NULL;
+    return (0);
+}
+
+int	extract_map(char **lines, int start_line, t_map *map)
+{
+	if (!lines || !map)
+		return (-1);
+    if (calculate_map_dimensions(lines, start_line, &map->height, &map->width) == -1)
+        return (-1);
+    if (allocate_and_fill_grid(lines, start_line, map) == -1)
+        return (-1);
+	return (0);
+}

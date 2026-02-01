@@ -176,11 +176,27 @@ static int	process_one_line(const char *line, t_game *game)
 	if (get_line_type(line) == TYPE_TEXTURE)
 	{
 		if (validate_texture_path(parts[1]) != 0)
-			return (free_file_array(parts), ft_putstr_fd("Error\nInvalid texture.\n", 2), -1);
-		if (ft_strcmp(parts[0], "NO") == 0) game->walls[TEX_NORTH].tex = mlx_load_png(parts[1]);
-		else if (ft_strcmp(parts[0], "SO") == 0) game->walls[TEX_SOUTH].tex = mlx_load_png(parts[1]);
-		else if (ft_strcmp(parts[0], "WE") == 0) game->walls[TEX_WEST].tex = mlx_load_png(parts[1]);
-		else if (ft_strcmp(parts[0], "EA") == 0) game->walls[TEX_EAST].tex = mlx_load_png(parts[1]);
+			return (free_file_array(parts), ft_putstr_fd("Error\nInvalid texture path.\n", 2), -1);
+		if (ft_strcmp(parts[0], "NO") == 0)
+		{
+			game->walls[TEX_NORTH].tex = mlx_load_png(parts[1]);
+			if (!game->walls[TEX_NORTH].tex) return (free_file_array(parts), ft_putstr_fd("Error\nFailed to load NO texture.\n", 2), -1);
+		}
+		else if (ft_strcmp(parts[0], "SO") == 0)
+		{
+			game->walls[TEX_SOUTH].tex = mlx_load_png(parts[1]);
+			if (!game->walls[TEX_SOUTH].tex) return (free_file_array(parts), ft_putstr_fd("Error\nFailed to load SO texture.\n", 2), -1);
+		}
+		else if (ft_strcmp(parts[0], "WE") == 0)
+		{
+			game->walls[TEX_WEST].tex = mlx_load_png(parts[1]);
+			if (!game->walls[TEX_WEST].tex) return (free_file_array(parts), ft_putstr_fd("Error\nFailed to load WE texture.\n", 2), -1);
+		}
+		else if (ft_strcmp(parts[0], "EA") == 0)
+		{
+			game->walls[TEX_EAST].tex = mlx_load_png(parts[1]);
+			if (!game->walls[TEX_EAST].tex) return (free_file_array(parts), ft_putstr_fd("Error\nFailed to load EA texture.\n", 2), -1);
+		}
 	}
 	else if (get_line_type(line) == TYPE_COLOR)
 	{

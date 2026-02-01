@@ -195,6 +195,5 @@ static int	process_one_line(const char *line, t_game *game)
 	}
 	else
 		return (free_file_array(parts), ft_putstr_fd("Error\nUnknown identifier.\n", 2), -1);
-	
 	return (free_file_array(parts), 0);
 }

@@ -12,3 +12,5 @@ subjects/
 lib/mlx/build/
 .DS_Store
 .vscode/
+
+*.md

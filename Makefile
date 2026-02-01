@@ -60,6 +60,7 @@ SRC_RAYCAST = raycast calculate_batch render_batch render_bg
 SRC_INPUTS = key_handler player_controls hook_player
 SRC_PLAYER = render_player
 SRC_UTILS = apply_wall_shading apply_depth_shading lerp load_image
+SRC_PARSING = parser parse_utils validators map_validators extractors color_parser
 
 # Source files
 SRC = \
@@ -68,7 +69,8 @@ SRC = \
 	$(addprefix $(SRC_DIR)/raycast/, $(addsuffix .c, $(SRC_RAYCAST))) \
 	$(addprefix $(SRC_DIR)/inputs/, $(addsuffix .c, $(SRC_INPUTS))) \
 	$(addprefix $(SRC_DIR)/player/, $(addsuffix .c, $(SRC_PLAYER))) \
-	$(addprefix $(SRC_DIR)/utils/, $(addsuffix .c, $(SRC_UTILS)))
+	$(addprefix $(SRC_DIR)/utils/, $(addsuffix .c, $(SRC_UTILS))) \
+	$(addprefix $(SRC_DIR)/parsing/, $(addsuffix .c, $(SRC_PARSING)))
 
 # Object files
 SRC_OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
@@ -103,8 +105,8 @@ $(LIBFT):
 
 $(MLX_LIB):
 	@mkdir -p $(MLX_BUILD)
-	@cd $(MLX_BUILD) && cmake .. >/dev/null 2>&1
-	@+cmake --build $(MLX_BUILD) >/dev/null 2>&1
+	@cd $(MLX_BUILD) && cmake ..
+	@+cmake --build $(MLX_BUILD)
 
 # Cleaning Rules
 clean:

@@ -157,5 +157,8 @@ uint32_t	apply_depth_shading(uint32_t rgba, float dist);
 uint32_t	apply_wall_shading(uint32_t rgba);
 uint32_t	lerp(uint32_t color, uint32_t fog_color, uint32_t t);
 
+// parsing
+int	parse_map_file(const char *filename, t_game *game);
+
 // mock
 void		init_mock_map(t_game *game);

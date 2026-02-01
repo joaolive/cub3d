@@ -12,7 +12,7 @@ int	validate_map_characters(const t_map *map)
 	{
 		j = 0;
 		if (!map->grid[i])
-			return (-1); // Should not happen if parsing is correct
+			return (-1); 
 		while (map->grid[i][j])
 		{
 			if (map->grid[i][j] != '0' && map->grid[i][j] != '1' &&
@@ -27,57 +27,30 @@ int	validate_map_characters(const t_map *map)
 	return (0);
 }
 
-/**
- * @brief Checks if a specific cell (y, x) is valid and surrounded.
- * A cell is valid if it's not on the edge of the grid and not adjacent
- * to a space ' '. This function assumes that the character at (y,x)
- * is a floor ('0') or a player ('N','S','E','W').
- *
- * @param map The map structure.
- * @param y The row index of the cell.
- * @param x The column index of the cell.
- * @return int 0 if valid, -1 if not.
- */
 static int	check_cell_neighbors(const t_map *map, int y, int x)
 {
 	size_t	len_up;
 	size_t	len_down;
 	size_t	len_curr;
 
-	// Check boundaries (is it on the first/last row or column?)
 	if (y == 0 || y == map->height - 1 || x == 0)
-		return (-1); // Touches top, bottom, or left edge
-
+		return (-1); 
 	len_curr = ft_strlen(map->grid[y]);
 	if ((size_t)x == len_curr - 1)
-		return (-1); // Touches right edge of its own line
-
-	// Check cell above
+		return (-1); 
 	len_up = ft_strlen(map->grid[y - 1]);
 	if ((size_t)x >= len_up || map->grid[y - 1][x] == ' ')
 		return (-1);
-
-	// Check cell below
 	len_down = ft_strlen(map->grid[y + 1]);
 	if ((size_t)x >= len_down || map->grid[y + 1][x] == ' ')
 		return (-1);
-
-	// Check cell to the left
 	if (map->grid[y][x - 1] == ' ')
 		return (-1);
-
-	// Check cell to the right
 	if (map->grid[y][x + 1] == ' ')
 		return (-1);
-
 	return (0);
 }
 
-/**
- * @brief Validates that the map is closed/surrounded by walls.
- * Iterates through the map grid and ensures that any floor or player
- * character is not adjacent to a space or the edge of the grid.
- */
 int	validate_map_is_closed(const t_map *map)
 {
 	int	y;
@@ -85,7 +58,6 @@ int	validate_map_is_closed(const t_map *map)
 
 	if (!map || !map->grid)
 		return (-1);
-
 	y = 0;
 	while (y < map->height)
 	{

@@ -1,7 +1,21 @@
 #ifndef PARSING_H
 # define PARSING_H
 
-# include "../include/cub3d.h"
+# include "./cub3d.h"
+
+typedef enum e_line_type {
+	TYPE_TEXTURE,
+	TYPE_COLOR,
+	TYPE_MAP,
+	TYPE_EMPTY,
+	TYPE_INVALID
+} 	t_line_type;
+
+typedef enum e_parse_state {
+	STATE_EXPECT_BLOCK,
+	STATE_EXPECT_SEPARATOR,
+	STATE_DONE
+} 	t_parse_state;
 
 // The main parsing function
 int			parse_map_file(const char *filename, t_game *game);

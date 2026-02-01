@@ -94,9 +94,6 @@ int	count_lines(char **arr)
 	return (count);
 }
 
-
-#include "parsing.h"
-
 uint32_t	parse_rgb_to_hex(const char *rgb_str)
 {
 	char	**tmp;
@@ -129,9 +126,6 @@ uint32_t	parse_rgb_to_hex(const char *rgb_str)
 	result = (r << 24) | (g << 16) | (b << 8) | 0xFF;
 	return (result);
 }
-
-#include "parsing.h"
-#include <unistd.h>
 
 int	validate_texture_path(const char *path)
 {

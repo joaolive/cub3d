@@ -1,21 +1,6 @@
 #include "parsing.h"
 #include <stdio.h>
 
-typedef enum e_line_type {
-	TYPE_TEXTURE,
-	TYPE_COLOR,
-	TYPE_MAP,
-	TYPE_EMPTY,
-	TYPE_INVALID
-} 	t_line_type;
-
-typedef enum e_parse_state {
-	STATE_EXPECT_BLOCK,
-	STATE_EXPECT_SEPARATOR,
-	STATE_DONE
-} 	t_parse_state;
-
-// Forward Declarations
 static int			find_map_start_index(char **lines);
 static int			process_configurations(char **lines, int map_start_line, t_game *game);
 static t_line_type	get_line_type(const char *trimmed_line);
@@ -100,7 +85,7 @@ static int	process_configurations(char **lines, int map_start_line, t_game *game
 	while (i < map_start_line)
 	{
 		trimmed = trim_whitespace(lines[i]);
-		if (!*trimmed) // Empty line
+		if (!*trimmed)
 		{
 			if (state == STATE_EXPECT_SEPARATOR)
 				state = STATE_EXPECT_BLOCK;

@@ -6,13 +6,12 @@ static int			process_configurations(char **lines, int map_start_line, t_game *ga
 static t_line_type	get_line_type(const char *trimmed_line);
 static int			process_one_line(const char *line, t_game *game);
 
-// Prototypes for helper functions for parse_map_file
 static int check_lines_and_config_sep(char **lines, int map_start);
 static int check_process_and_extract_map(char **lines, int map_start, t_game *game);
 static int validate_map_and_player(char **lines, t_game *game);
-static int initial_file_read_check(char **lines); // New prototype
+static int initial_file_read_check(char **lines);
+static int free_trimmed_and_return(char *trimmed, int ret_val); // New helper prototype
 
-// Helper function definitions
 static int check_lines_and_config_sep(char **lines, int map_start)
 {
     if (!lines)
@@ -26,7 +25,7 @@ static int check_lines_and_config_sep(char **lines, int map_start)
         ft_putstr_fd("Error\nConfig must be separated from map by an empty line.\n", 2);
         return (-1);
     }
-    return (0); // Success
+    return (0);
 }
 
 static int check_process_and_extract_map(char **lines, int map_start, t_game *game)
@@ -42,7 +41,7 @@ static int check_process_and_extract_map(char **lines, int map_start, t_game *ga
         ft_putstr_fd("Error\nFailed to extract map.\n", 2);
         return (-1);
     }
-    return (0); // Success
+    return (0);
 }
 
 static int validate_map_and_player(char **lines, t_game *game)
@@ -65,7 +64,7 @@ static int validate_map_and_player(char **lines, t_game *game)
         ft_putstr_fd("Error\nInvalid player setup.\n", 2);
         return (-1);
     }
-    return (0); // Success
+    return (0);
 }
 
 static int initial_file_read_check(char **lines)
@@ -89,23 +88,24 @@ int	parse_map_file(const char *filename, t_game *game)
     status = initial_file_read_check(lines);
     if (status != 0)
         return (status);
-
-    map_start = find_map_start_index(lines); // Corrected indentation
-
+    map_start = find_map_start_index(lines);
     status = check_lines_and_config_sep(lines, map_start);
     if (status != 0)
-        return (status);
-    
+        return (status);    
     status = check_process_and_extract_map(lines, map_start, game);
     if (status != 0)
         return (status);
-
     status = validate_map_and_player(lines, game);
     if (status != 0)
         return (status);
-
     free_file_array(lines);
     return (0);
+}
+
+static int free_trimmed_and_return(char *trimmed, int ret_val)
+{
+    free(trimmed);
+    return (ret_val);
 }
 
 static int	find_map_start_index(char **lines)
@@ -122,16 +122,12 @@ static int	find_map_start_index(char **lines)
 		trimmed = trim_whitespace(lines[i]);
 		if (!trimmed) return (-1);
 		if (get_line_type(trimmed) != TYPE_MAP)
-		{
-			free(trimmed);
-			return (i + 1);
-		}
+			return (free_trimmed_and_return(trimmed, i + 1));
 		free(trimmed);
 		i--;
 	}
 	return (0);
 }
-
 static int	process_configurations(char **lines, int map_start_line, t_game *game)
 {
 	int i = 0;

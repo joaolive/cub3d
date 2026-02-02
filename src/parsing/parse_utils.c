@@ -2,6 +2,11 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+// Prototypes for helper functions
+static int read_lines_into_array(int fd, char ***result_ptr);
+static int calculate_map_dimensions(char **lines, int start_line, int *height_ptr, int *max_width_ptr);
+static int allocate_and_fill_grid(char **lines, int start_line, t_map *map);
+
 char	*trim_whitespace(char *str)
 {
 	int	start;
@@ -239,5 +244,5 @@ int	extract_map(char **lines, int start_line, t_map *map)
         return (-1);
     if (allocate_and_fill_grid(lines, start_line, map) == -1)
         return (-1);
-	return (0);
+    return (0);
 }

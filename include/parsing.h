@@ -17,8 +17,20 @@ typedef enum e_parse_state {
 	STATE_DONE
 } 	t_parse_state;
 
+typedef struct s_config_parsing_state
+{
+    int             tex_count;
+    int             color_count;
+    t_parse_state   state;
+    t_line_type     current_block_type;
+}   t_config_parsing_state;
+
 // The main parsing function
 int			parse_map_file(const char *filename, t_game *game);
+int			process_configurations(char **lines, int map_start_line, t_game *game);
+t_line_type	get_line_type(const char *line);
+int			process_one_line(const char *line, t_game *game);
+int			find_map_start_index(char **lines);
 
 // Map extraction and validation
 int			extract_map(char **lines, int start_line, t_map *map);

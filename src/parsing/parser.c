@@ -10,6 +10,7 @@ static int			process_one_line(const char *line, t_game *game);
 static int check_lines_and_config_sep(char **lines, int map_start);
 static int check_process_and_extract_map(char **lines, int map_start, t_game *game);
 static int validate_map_and_player(char **lines, t_game *game);
+static int initial_file_read_check(char **lines); // New prototype
 
 // Helper function definitions
 static int check_lines_and_config_sep(char **lines, int map_start)
@@ -67,6 +68,16 @@ static int validate_map_and_player(char **lines, t_game *game)
     return (0); // Success
 }
 
+static int initial_file_read_check(char **lines)
+{
+    if (!lines)
+    {
+        ft_putstr_fd("Error\nCould not read file.\n", 2);
+        return (-1);
+    }
+    return (0);
+}
+
 int	parse_map_file(const char *filename, t_game *game)
 {
 	char		**lines;
@@ -75,15 +86,11 @@ int	parse_map_file(const char *filename, t_game *game)
 
 	ft_bzero(game, sizeof(t_game));
 	lines = read_file_to_array(filename);
-    
-    // Original lines 5-6 logic, now without comma operator
-    if (!lines)
-    {
-        ft_putstr_fd("Error\nCould not read file.\n", 2);
-        return (-1);
-    }
+    status = initial_file_read_check(lines);
+    if (status != 0)
+        return (status);
 
-	map_start = find_map_start_index(lines);
+    map_start = find_map_start_index(lines); // Corrected indentation
 
     status = check_lines_and_config_sep(lines, map_start);
     if (status != 0)

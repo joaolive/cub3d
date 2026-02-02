@@ -31,6 +31,7 @@ int			process_configurations(char **lines, int map_start_line, t_game *game);
 t_line_type	get_line_type(const char *line);
 int			process_one_line(const char *line, t_game *game);
 int			find_map_start_index(char **lines);
+void		update_parsing_state(t_config_parsing_state *parse_state);
 
 // Map extraction and validation
 int			extract_map(char **lines, int start_line, t_map *map);

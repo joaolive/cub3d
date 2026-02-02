@@ -1,14 +1,12 @@
 #include "parsing.h"
 #include <stdio.h>
 
-// Moved from src/parsing/parser.c
 static int free_trimmed_and_return(char *trimmed, int ret_val)
 {
 	free(trimmed);
 	return (ret_val);
 }
 
-// Moved from src/parsing/parser.c
 int	find_map_start_index(char **lines)
 {
 	int		i;

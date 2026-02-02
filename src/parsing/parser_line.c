@@ -1,7 +1,6 @@
 #include "parsing.h"
 #include <stdio.h>
 
-// Moved from src/parsing/parser.c
 static char	**parse_line_parts(const char *line)
 {
 	char	**parts;
@@ -16,39 +15,50 @@ static char	**parse_line_parts(const char *line)
 	return (parts);
 }
 
-// Moved from src/parsing/parser.c
-static int	process_texture_line(char **parts, t_game *game)
+static int	load_texture_by_direction(char *direction, char *path, t_game *game)
 {
-	if (validate_texture_path(parts[1]) != 0)
-		return (ft_putstr_fd("Error\nInvalid texture path.\n", 2), -1);
-	if (ft_strcmp(parts[0], "NO") == 0)
+	if (ft_strcmp(direction, "NO") == 0)
 	{
-		game->walls[TEX_NORTH].tex = mlx_load_png(parts[1]);
+		game->walls[TEX_NORTH].tex = mlx_load_png(path);
 		if (!game->walls[TEX_NORTH].tex)
-			return (ft_putstr_fd("Error\nFailed to load NO texture.\n", 2), -1);
+			return (-1);
 	}
-	else if (ft_strcmp(parts[0], "SO") == 0)
+	else if (ft_strcmp(direction, "SO") == 0)
 	{
-		game->walls[TEX_SOUTH].tex = mlx_load_png(parts[1]);
+		game->walls[TEX_SOUTH].tex = mlx_load_png(path);
 		if (!game->walls[TEX_SOUTH].tex)
-			return (ft_putstr_fd("Error\nFailed to load SO texture.\n", 2), -1);
+			return (-1);
 	}
-	else if (ft_strcmp(parts[0], "WE") == 0)
+	else if (ft_strcmp(direction, "WE") == 0)
 	{
-		game->walls[TEX_WEST].tex = mlx_load_png(parts[1]);
+		game->walls[TEX_WEST].tex = mlx_load_png(path);
 		if (!game->walls[TEX_WEST].tex)
-			return (ft_putstr_fd("Error\nFailed to load WE texture.\n", 2), -1);
+			return (-1);
 	}
-	else if (ft_strcmp(parts[0], "EA") == 0)
+	else if (ft_strcmp(direction, "EA") == 0)
 	{
-		game->walls[TEX_EAST].tex = mlx_load_png(parts[1]);
+		game->walls[TEX_EAST].tex = mlx_load_png(path);
 		if (!game->walls[TEX_EAST].tex)
-			return (ft_putstr_fd("Error\nFailed to load EA texture.\n", 2), -1);
+			return (-1);
 	}
 	return (0);
 }
 
-// Moved from src/parsing/parser.c
+static int	process_texture_line(char **parts, t_game *game)
+{
+	if (validate_texture_path(parts[1]) != 0)
+	{
+		ft_putstr_fd("Error\nInvalid texture path.\n", 2);
+		return (-1);
+	}
+	if (load_texture_by_direction(parts[0], parts[1], game) != 0)
+	{
+		ft_putstr_fd("Error\nFailed to load texture.\n", 2);
+		return (-1);
+	}
+	return (0);
+}
+
 static int	process_color_line(char **parts, t_game *game)
 {
 	uint32_t	color;
@@ -65,7 +75,6 @@ static int	process_color_line(char **parts, t_game *game)
 	return (0);
 }
 
-// Moved from src/parsing/parser.c
 int	process_one_line(const char *line, t_game *game)
 {
 	char	**parts;

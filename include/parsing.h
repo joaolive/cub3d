@@ -33,23 +33,21 @@ int			process_one_line(const char *line, t_game *game);
 int			find_map_start_index(char **lines);
 void		update_parsing_state(t_config_parsing_state *parse_state);
 
-// Map extraction and validation
-int			extract_map(char **lines, int start_line, t_map *map);
-int			validate_map_characters(const t_map *map);
-int			validate_map_is_closed(const t_map *map);
-int			validate_single_player(t_game *game);
-
-// Validation helpers
-int			validate_texture_path(const char *path);
-int			validate_color_format(const char *color_str);
-int			validate_rgb_values(int r, int g, int b);
-
-// Utility functions used by the parser
+// Parsing utilities
 char		*trim_whitespace(char *str);
 char		**read_file_to_array(const char *filename);
 void		free_file_array(char **arr);
 int			count_lines(char **arr);
 int			is_empty_line(const char *line);
 uint32_t	parse_rgb_to_hex(const char *rgb_str);
+int			validate_texture_path(const char *path);
+int			validate_color_format(const char *color_str);
+int			validate_rgb_values(int r, int g, int b);
+int			extract_map(char **lines, int start_line, t_map *map);
+
+// Map validation
+int			validate_map_characters(const t_map *map);
+int			validate_map_is_closed(const t_map *map);
+int			validate_single_player(t_game *game);
 
 #endif

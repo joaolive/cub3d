@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 14:00:00 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/31 09:57:28 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/02/04 11:37:31 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,21 @@ typedef struct s_handler
 	char				specifier;
 	t_format_handler	handler_func;
 }						t_handler;
+
+typedef struct s_buffer
+{
+	char	*str;
+	size_t	size;
+	size_t	written;
+}	t_buffer;
+
+typedef int	(*t_format_handler_buf)(t_buffer *buffer, va_list arg);
+
+typedef struct s_handler_buf
+{
+	char					specifier;
+	t_format_handler_buf	handler_func;
+}							t_handler_buf;
 
 typedef struct s_list
 {
@@ -167,6 +182,20 @@ int		ft_print_chex(va_list args);
 int		ft_print_ptr(va_list args);
 int		ft_print_percent(va_list args);
 int		ft_puthex(unsigned long long num, size_t size_in_bytes, char specifier);
+
+int		ft_snprintf(char *str, size_t size, const char *format, ...);
+int		snprintf_char(t_buffer *buffer, va_list args);
+int		snprintf_chex(t_buffer *buffer, va_list args);
+int		snprintf_lhex(t_buffer *buffer, va_list args);
+int		snprintf_num(t_buffer *buffer, va_list args);
+int		snprintf_percent(t_buffer *buffer, va_list args);
+int		snprintf_ptr(t_buffer *buffer, va_list args);
+void	snprintf_putchar(t_buffer *buffer, char c);
+int		snprintf_puthex(t_buffer *buffer, unsigned long long num,
+			size_t size_in_bytes, char specifier);
+void	snprintf_putstr(t_buffer *buffer, char *str);
+int		snprintf_str(t_buffer *buffer, va_list args);
+int		snprintf_unum(t_buffer *buffer, va_list args);
 
 size_t	ft_djb2(const char *str);
 t_hnode	*ft_hnodedetach(t_hnode **node);

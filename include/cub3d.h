@@ -6,7 +6,7 @@
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/05 13:45:39 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/31 18:31:17 by joaolive         ###   ########.fr       */
+/*   Updated: 2026/02/03 08:37:25 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,18 @@
 #define FLAG_ROT_R (1 << 5) // 0010 0000
 
 // --- ÍNDICES DE TEXTURA ---
-#define TEX_EAST 0
-#define TEX_WEST 1
+#define TEX_WEST 0
+#define TEX_EAST 1
 #define TEX_NORTH 2
 #define TEX_SOUTH 3
 #define TEX_VOID 255
+
+// // --- ÍNDICES DE TEXTURA ---
+// #define TEX_EAST 0
+// #define TEX_WEST 1
+// #define TEX_NORTH 2
+// #define TEX_SOUTH 3
+// #define TEX_VOID 255
 
 typedef struct s_keymap
 {
@@ -74,6 +81,8 @@ typedef struct s_player
 	t_vec		dir;
 	t_vec		plane;
 	// int32_t		pitch;
+	double		anim_timer;
+	uint8_t		curr_frame;
 	uint8_t		mov_flags;
 }	t_player;
 
@@ -154,7 +163,8 @@ void		hook_player(t_game *game);
 void		render_player(t_game *game);
 
 // utils
-mlx_image_t	*load_image(mlx_t *mlx, char *path);
+uint8_t		load_textures(t_game *game, char *key, char *path, uint32_t count);
+uint8_t		load_images(t_game *game, char *key, char *path, uint32_t count);
 uint32_t	apply_depth_shading(uint32_t rgba, float dist);
 uint32_t	apply_wall_shading(uint32_t rgba);
 uint32_t	lerp(uint32_t color, uint32_t fog_color, uint32_t t);

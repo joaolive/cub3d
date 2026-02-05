@@ -6,7 +6,7 @@
 #    By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/08/31 09:06:36 by joaolive          #+#    #+#              #
-#    Updated: 2026/01/31 09:56:44 by joaolive         ###   ########.fr        #
+#    Updated: 2026/02/04 11:36:57 by joaolive         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,6 +67,7 @@ CORE_NAMES = $(addsuffix .c, \
 			ft_strtrim \
 			ft_split \
 			ft_itoa \
+			ft_utoa \
 			ft_strmapi \
 			ft_striteri \
 			ft_putchar_fd \
@@ -146,6 +147,20 @@ HASH_NAMES = $(addsuffix .c, \
 			ft_tabclear \
 			ft_tabdelone \
 			ft_tabinit)
+
+SNPRINTF_NAMES = $(addsuffix .c, \
+				ft_snprintf \
+				snprintf_char \
+				snprintf_chex \
+				snprintf_lhex \
+				snprintf_num \
+				snprintf_percent \
+				snprintf_ptr \
+				snprintf_putchar \
+				snprintf_puthex \
+				snprintf_putstr \
+				snprintf_str \
+				snprintf_unum)
 
 # Source files
 CORE_SRCS = $(addprefix $(SRC_DIR)/core/, $(CORE_NAMES))

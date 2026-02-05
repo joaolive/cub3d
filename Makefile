@@ -6,7 +6,7 @@
 #    By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/06 05:55:59 by joaolive          #+#    #+#              #
-#    Updated: 2026/01/31 18:31:25 by joaolive         ###   ########.fr        #
+#    Updated: 2026/02/05 08:50:23 by joaolive         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,6 +61,7 @@ SRC_INPUTS = key_handler player_controls hook_player
 SRC_PLAYER = render_player
 SRC_UTILS = apply_wall_shading apply_depth_shading lerp load_image
 SRC_PARSING = parser parser_config_main parser_config_utils parser_line parser_utils parser_file_utils parser_validation_utils parser_map_utils map_structure_validators map_player_validators free_map
+SRC_UTILS = apply_wall_shading apply_depth_shading lerp load_textures load_images
 
 # Source files
 SRC = \

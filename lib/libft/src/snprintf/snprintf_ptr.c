@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_player.c                                    :+:      :+:    :+:   */
+/*   snprintf_ptr.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/05 08:36:57 by joaolive          #+#    #+#             */
-/*   Updated: 2026/02/05 08:37:03 by joaolive         ###   ########.fr       */
+/*   Created: 2025/07/31 09:05:53 by joaolive          #+#    #+#             */
+/*   Updated: 2026/02/04 11:31:02 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "libft.h"
 
-void	render_player(t_game *game)
+int	snprintf_ptr(t_buffer *buffer, va_list args)
 {
-	game->player.img = (mlx_image_t *)ft_tabget(game->assets, "p_0");
-	mlx_image_to_window(game->mlx, game->player.img, 0, 0);
-	game->player.img->instances[0].x = (game->mlx->width >> 1) - (game->player.img->width >> 1);
-	game->player.img->instances[0].y = game->mlx->height - game->player.img->height;
+	unsigned long long	ptr;
+
+	ptr = va_arg(args, unsigned long long);
+	if (!ptr || ptr == 0)
+	{
+		snprintf_putstr(buffer, "(nil)");
+		return (0);
+	}
+	snprintf_putstr(buffer, "0x");
+	return (snprintf_puthex(buffer, ptr, sizeof(unsigned long long), 'x'));
 }

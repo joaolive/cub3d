@@ -1,33 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   load_image.c                                       :+:      :+:    :+:   */
+/*   snprintf_num.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/01/25 09:46:23 by joaolive          #+#    #+#             */
-/*   Updated: 2026/01/31 18:38:22 by joaolive         ###   ########.fr       */
+/*   Created: 2025/07/29 16:50:07 by joaolive          #+#    #+#             */
+/*   Updated: 2026/02/04 11:29:19 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "libft.h"
 
-mlx_image_t	*load_image(mlx_t *mlx, char *path)
+int	snprintf_num(t_buffer *buffer, va_list args)
 {
-	mlx_texture_t	*texture;
-	mlx_image_t		*image;
+	char	*str_num;
+	int		num;
 
-	texture = mlx_load_png(path);
-	if (!texture)
-		return (NULL);
-	image = mlx_texture_to_image(mlx, texture);
-	mlx_delete_texture(texture);
-	if (!image)
-		return (NULL);
-	if (!mlx_resize_image(image, 512, 512))
-	{
-		mlx_delete_image(mlx, image);
-		return (NULL);
-	}
-	return (image);
+	num = (int)va_arg(args, int);
+	str_num = ft_itoa(num);
+	if (!str_num)
+		return (1);
+	snprintf_putstr(buffer, str_num);
+	free(str_num);
+	return (0);
 }

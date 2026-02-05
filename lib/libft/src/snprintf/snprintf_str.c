@@ -1,21 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_player.c                                    :+:      :+:    :+:   */
+/*   snprintf_str.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/05 08:36:57 by joaolive          #+#    #+#             */
-/*   Updated: 2026/02/05 08:37:03 by joaolive         ###   ########.fr       */
+/*   Created: 2025/07/29 19:08:46 by joaolive          #+#    #+#             */
+/*   Updated: 2026/02/04 11:14:12 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "libft.h"
 
-void	render_player(t_game *game)
+int	snprintf_str(t_buffer *buffer, va_list args)
 {
-	game->player.img = (mlx_image_t *)ft_tabget(game->assets, "p_0");
-	mlx_image_to_window(game->mlx, game->player.img, 0, 0);
-	game->player.img->instances[0].x = (game->mlx->width >> 1) - (game->player.img->width >> 1);
-	game->player.img->instances[0].y = game->mlx->height - game->player.img->height;
+	char	*str;
+
+	str = (char *)va_arg(args, char *);
+	if (!str)
+		str = "(null)";
+	snprintf_putstr(buffer, str);
+	return (0);
 }

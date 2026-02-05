@@ -55,12 +55,12 @@ LDFLAGS = -L$(LIBFT_DIR) -L$(MLX_BUILD)
 LDLIBS = -lft -lmlx42 -lglfw -lpng16 -ldl -pthread -lm
 
 SRC_MAIN = main mock_map
-SRC_CORE = init_window game_loop
+SRC_CORE = init_window game_loop terminate
 SRC_RAYCAST = raycast calculate_batch render_batch render_bg
 SRC_INPUTS = key_handler player_controls hook_player
 SRC_PLAYER = render_player
 SRC_UTILS = apply_wall_shading apply_depth_shading lerp load_image
-SRC_PARSING = parser parser_config_main parser_config_utils parser_line parser_utils parser_file_utils parser_validation_utils parser_map_utils map_structure_validators map_player_validators
+SRC_PARSING = parser parser_config_main parser_config_utils parser_line parser_utils parser_file_utils parser_validation_utils parser_map_utils map_structure_validators map_player_validators free_map
 
 # Source files
 SRC = \
@@ -80,7 +80,7 @@ DEPS = $(SRC_OBJS:.o=.d)
 
 all: $(LIBFT) $(MLX_LIB) $(EXEC)
 
-$(EXEC): $(SRC_OBJS) | $(BIN_DIR)
+$(EXEC): $(SRC_OBJS) $(MLX_LIB) | $(BIN_DIR)
 	@printf "$(CC_PINK)Linking $(NAME)... $(RESET)"
 # Start of Animation Loop
 	@for i in 1 2 3 4 5 6 7 8 9 10; do \
@@ -124,9 +124,13 @@ re: fclean
 	@$(MAKE) all --no-print-directory
 	@echo "$(CC_GREEN)🦇  The Project has risen from the dead!$(RESET)"
 
+valgrind: $(EXEC)
+	@echo "$(CC_PURPLE)🧪 Running Valgrind with suppressions (output to valgrind_log.txt)...$(RESET)"
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --vgdb=no --suppressions=mlx.supp --log-file=valgrind_log.txt $(EXEC) maps/map_valid.cub
+
 # Include dependency files to track header changes
 -include $(DEPS)
 
 # PHONY Targets
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re valgrind
 

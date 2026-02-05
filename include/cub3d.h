@@ -134,6 +134,8 @@ typedef struct s_game
 // core
 int			init_window(t_game *game);
 void		game_loop(void *param);
+void		terminate(t_game *game);
+void		free_game_resources(t_game *game);
 
 // render
 void		render_bg(t_game *game);
@@ -159,6 +161,7 @@ uint32_t	lerp(uint32_t color, uint32_t fog_color, uint32_t t);
 
 // parsing
 int	parse_map_file(const char *filename, t_game *game);
+void		free_map(t_map *map);
 
 // mock
 void		init_mock_map(t_game *game);

@@ -23,13 +23,19 @@ int main(int argc, char **argv)
 	}
 	ft_bzero(&game, sizeof(t_game));
 	if (parse_map_file(argv[1], &game))
+	{
+		free_game_resources(&game); // Adicionado: Libera recursos em caso de falha no parsing
 		return (1);
+	}
 	if (init_window(&game))
+	{
+		free_game_resources(&game); // Adicionado: Libera recursos em caso de falha na inicialização da janela
 		return (1);
+	}
 
 	mlx_key_hook(game.mlx, &key_handler, &game);
 	mlx_loop_hook(game.mlx, &game_loop, &game);
 	mlx_loop(game.mlx);
-	// terminate(game); // TODO
+	free_game_resources(&game); // Substituído: Chamada à nova função de liberação de recursos
 	return (0);
 }

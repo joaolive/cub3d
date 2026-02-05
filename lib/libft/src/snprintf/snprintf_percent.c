@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   render_player.c                                    :+:      :+:    :+:   */
+/*   snprintf_percent.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/05 08:36:57 by joaolive          #+#    #+#             */
-/*   Updated: 2026/02/05 08:37:03 by joaolive         ###   ########.fr       */
+/*   Created: 2025/07/31 10:16:21 by joaolive          #+#    #+#             */
+/*   Updated: 2026/02/04 11:29:23 by joaolive         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "libft.h"
 
-void	render_player(t_game *game)
+int	snprintf_percent(t_buffer *buffer, va_list args)
 {
-	game->player.img = (mlx_image_t *)ft_tabget(game->assets, "p_0");
-	mlx_image_to_window(game->mlx, game->player.img, 0, 0);
-	game->player.img->instances[0].x = (game->mlx->width >> 1) - (game->player.img->width >> 1);
-	game->player.img->instances[0].y = game->mlx->height - game->player.img->height;
+	(void)args;
+	snprintf_putchar(buffer, '%');
+	return (0);
 }

@@ -6,7 +6,7 @@
 #    By: joaolive <joaolive@student.42sp.org.br>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/09/06 05:55:59 by joaolive          #+#    #+#              #
-#    Updated: 2026/01/31 18:31:25 by joaolive         ###   ########.fr        #
+#    Updated: 2026/02/02 17:47:45 by joaolive         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,7 @@ SRC_CORE = init_window game_loop
 SRC_RAYCAST = raycast calculate_batch render_batch render_bg
 SRC_INPUTS = key_handler player_controls hook_player
 SRC_PLAYER = render_player
-SRC_UTILS = apply_wall_shading apply_depth_shading lerp load_image
+SRC_UTILS = apply_wall_shading apply_depth_shading lerp load_textures load_images
 
 # Source files
 SRC = \

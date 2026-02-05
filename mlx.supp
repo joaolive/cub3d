@@ -1,0 +1,136 @@
+# Valgrind suppression file for MLX42, GLFW, and related X11/Mesa/LLVM libraries.
+# These suppressions target known leaks in third-party libraries that are often
+# considered acceptable for the lifetime of a graphical application.
+
+{
+   <mlx_init_leak>
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:_glfwInit
+   fun:mlx_init
+   fun:main
+}
+{
+   <x11_open_display_leak>
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:XOpenDisplay
+   fun:_glfwPlatformInit
+   fun:_glfwInit
+   fun:mlx_init
+   fun:main
+}
+
+# --- General suppressions for common external libraries ---
+
+{
+   <libglfw_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libglfw.so*
+}
+{
+   <libX11_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so*
+}
+{
+   <libXext_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libXext.so*
+}
+{
+   <libXcursor_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libXcursor.so*
+}
+{
+   <libXrandr_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libXrandr.so*
+}
+{
+   <libGLX_mesa_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libGLX_mesa.so*
+}
+{
+   <libgallium_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libgallium-*.so
+}
+{
+   <libLLVM_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libLLVM.so*
+}
+{
+   <libfontconfig_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so*
+}
+{
+   <libfreetype_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so*
+}
+{
+   <libglx_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libGLX.so*
+}
+{
+   <libxxf86vm_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libXxf86vm.so*
+}
+{
+   <libxi_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libXi.so*
+}
+{
+   <libexpat_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libexpat.so*
+}
+{
+   <libpixman_all_leaks>
+   Memcheck:Leak
+   match-leak-kinds: all
+   obj:/usr/lib/x86_64-linux-gnu/libpixman-1.so*
+}
+{
+   <libc_regex_leak>
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:re_*
+   obj:/usr/lib/x86_64-linux-gnu/libc.so*
+}
+{
+   <libc_regcomp_leak>
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:regcomp
+   obj:/usr/lib/x86_64-linux-gnu/libc.so*
+}
+{
+   <libc_re_compile_internal_leak>
+   Memcheck:Leak
+   match-leak-kinds: all
+   fun:re_compile_internal
+   obj:/usr/lib/x86_64-linux-gnu/libc.so*
+}

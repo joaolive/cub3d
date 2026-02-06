@@ -1,12 +1,13 @@
 #include "parsing.h"
 #include <stdio.h>
 
-static int			check_lines_and_config_sep(char **lines, int map_start);
-static int			check_process_and_extract_map(char **lines, int map_start, t_game *game);
-static int			validate_map_and_player(char **lines, t_game *game);
-static int			initial_file_read_check(char **lines);
+static int	check_lines_and_config_sep(char **lines, int map_start);
+static int	check_process_and_extract_map(char **lines, int map_start,
+			t_game *game);
+static int	validate_map_and_player(char **lines, t_game *game);
+static int	initial_file_read_check(char **lines);
 
-static int initial_file_read_check(char **lines)
+static int	initial_file_read_check(char **lines)
 {
 	if (!lines)
 	{
@@ -16,7 +17,7 @@ static int initial_file_read_check(char **lines)
 	return (0);
 }
 
-static int check_lines_and_config_sep(char **lines, int map_start)
+static int	check_lines_and_config_sep(char **lines, int map_start)
 {
 	if (!lines)
 	{
@@ -32,7 +33,8 @@ static int check_lines_and_config_sep(char **lines, int map_start)
 	return (0);
 }
 
-static int check_process_and_extract_map(char **lines, int map_start, t_game *game)
+static int	check_process_and_extract_map(char **lines, int map_start,
+			t_game *game)
 {
 	if (map_start < 0 || process_configurations(lines, map_start, game) != 0)
 	{
@@ -48,7 +50,7 @@ static int check_process_and_extract_map(char **lines, int map_start, t_game *ga
 	return (0);
 }
 
-static int validate_map_and_player(char **lines, t_game *game)
+static int	validate_map_and_player(char **lines, t_game *game)
 {
 	if (validate_map_characters(&game->map) != 0)
 	{

@@ -71,21 +71,57 @@ static void	calc_wall_geometry(t_game *game, int32_t i)
 	game->batch.dist[i] = (float) game->ray.perp_dist;
 }
 
+static int	get_tex_id(t_ray *ray)
+{
+	if (ray->side == 0 && ray->dir.x > 0)
+		return (TEX_EAST);
+	if (ray->side == 0)
+		return (TEX_WEST);
+	if (ray->dir.y > 0)
+		return (TEX_SOUTH);
+	return (TEX_NORTH);
+}
+
+static int	need_flip(t_ray *ray)
+{
+	if (ray->side == 0 && ray->dir.x > 0)
+		return (1);
+	if (ray->side == 1 && ray->dir.y > 0)
+		return (1);
+	return (0);
+}
+
+static double	get_wall_x(t_game *game, t_ray *ray)
+{
+	double	pos;
+	double	dir;
+	double	wall_x;
+
+	if (ray->side == 0)
+	{
+		pos = game->player.pos.y;
+		dir = ray->dir.y;
+	}
+	else
+	{
+		pos = game->player.pos.x;
+		dir = ray->dir.x;
+	}
+	wall_x = pos + ray->perp_dist * dir;
+	wall_x -= floor(wall_x);
+	return (wall_x);
+}
+
 static void	tex_info(t_game *game, t_ray *ray, t_batch *batch, int i)
 {
-	t_wall_tex		*wall;
-	double			wall_x;
-	const double	pos[2] = {game->player.pos.y, game->player.pos.x};
-	const double	dir[2] = {ray->dir.y, ray->dir.x};
-	static int		ids[4] = {TEX_WEST, TEX_EAST, TEX_NORTH, TEX_SOUTH};
+	t_wall_tex	*wall;
+	double		wall_x;
 
-	batch->tex_id[i] = ids[(ray->side << 1)
-		| (((double *)&ray->dir.x)[ray->side] > 0)];
+	batch->tex_id[i] = get_tex_id(ray);
 	wall = &game->walls[batch->tex_id[i]];
-	wall_x = pos[ray->side] + ray->perp_dist * dir[ray->side];
-	wall_x -= floor(wall_x);
+	wall_x = get_wall_x(game, ray);
 	batch->tex_x[i] = (int)(wall_x * (double)wall->tex->width);
-	if (ray->side ^ (((double *)&ray->dir.x)[ray->side] > 0))
+	if (need_flip(ray))
 		batch->tex_x[i] = (wall->tex->width - batch->tex_x[i] - 1);
 	batch->step[i] = 1.0 * wall->tex->height / ray->line_height;
 	batch->tex_pos[i] = (batch->draw_start[i] - (game->mlx->height >> 1)

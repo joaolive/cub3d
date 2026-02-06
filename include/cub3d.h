@@ -18,35 +18,24 @@
 # include "libft.h"
 # include "MLX42/MLX42.h"
 
-// --- WINDOW ---
 #define WIN_WIDTH 1280
 #define WIN_HEIGHT 720
 #define WIN_TITLE "Cub3d"
 
-// Tamanho do bloco
 #define BATCH_SIZE 8
 
-// --- BITMASKS DE MOVIMENTO ---
-#define FLAG_MOVE_W (1 << 0) // 0000 0001
-#define FLAG_MOVE_S (1 << 1) // 0000 0010
-#define FLAG_MOVE_A (1 << 2) // 0000 0100
-#define FLAG_MOVE_D (1 << 3) // 0000 1000
-#define FLAG_ROT_L (1 << 4) // 0001 0000
-#define FLAG_ROT_R (1 << 5) // 0010 0000
+#define FLAG_MOVE_W (1 << 0)
+#define FLAG_MOVE_S (1 << 1)
+#define FLAG_MOVE_A (1 << 2)
+#define FLAG_MOVE_D (1 << 3)
+#define FLAG_ROT_L (1 << 4)
+#define FLAG_ROT_R (1 << 5)
 
-// --- ÍNDICES DE TEXTURA ---
 #define TEX_WEST 0
 #define TEX_EAST 1
 #define TEX_NORTH 2
 #define TEX_SOUTH 3
 #define TEX_VOID 255
-
-// // --- ÍNDICES DE TEXTURA ---
-// #define TEX_EAST 0
-// #define TEX_WEST 1
-// #define TEX_NORTH 2
-// #define TEX_SOUTH 3
-// #define TEX_VOID 255
 
 typedef struct s_keymap
 {
@@ -80,7 +69,6 @@ typedef struct s_player
 	t_vec		pos;
 	t_vec		dir;
 	t_vec		plane;
-	// int32_t		pitch;
 	double		anim_timer;
 	uint8_t		curr_frame;
 	uint8_t		mov_flags;
@@ -96,7 +84,7 @@ typedef struct s_map
 typedef struct s_wall_tex
 {
 	mlx_texture_t	*tex;
-	uint32_t		width_mask; // se width é 64, mask é 63
+	uint32_t		width_mask;
 	uint32_t		height_mask;
 }	t_wall_tex;
 
@@ -120,9 +108,9 @@ typedef struct s_ray
 	t_ivec		map;
 	t_ivec		step;
 	double		perp_dist;
-	double		wall_x; // ponto exato onde o raio bateu na parede (0 a 1)
+	double		wall_x;
 	int32_t		line_height;
-	uint8_t		side; // 0 = vertical, 1 = horizontal
+	uint8_t		side;
 }	t_ray;
 
 typedef struct s_game
@@ -134,36 +122,30 @@ typedef struct s_game
 	t_player	player;
 	t_batch		batch;
 	t_ray		ray;
-	t_wall_tex	walls[4]; // [0]=N, [1]=S, [2]=W, [3]=E
+	t_wall_tex	walls[4];
 	char		*tex_paths[4];
 	double		delta_time;
-	uint32_t	floor; // RGBA hex
-	uint32_t	ceiling; // RGBA hex
+	uint32_t	floor;
+	uint32_t	ceiling;
 }	t_game;
 
-// core
 int			init_window(t_game *game);
 void		game_loop(void *param);
 void		terminate(t_game *game);
 void		free_game_resources(t_game *game);
 
-// render
 void		render_bg(t_game *game);
 
-//raycast
 void		raycast(t_game *game);
 void		render_batch(t_game *game, int32_t start_x, int32_t i);
 void		calculate_batch(t_game *game, int32_t start_x);
 
-// input
 void		key_handler(mlx_key_data_t key, void *param);
 void		player_controls(mlx_key_data_t key, t_game *game);
 void		hook_player(t_game *game);
 
-// player
 void		render_player(t_game *game);
 
-// utils
 uint8_t		load_textures(t_game *game, char *key, char *path, uint32_t count);
 uint8_t		load_images(t_game *game, char *key, char *path, uint32_t count);
 mlx_image_t	*load_image(mlx_t *mlx, char *path);
@@ -172,9 +154,7 @@ uint32_t	apply_depth_shading(uint32_t rgba, float dist);
 uint32_t	apply_wall_shading(uint32_t rgba);
 uint32_t	lerp(uint32_t color, uint32_t fog_color, uint32_t t);
 
-// parsing
 int	parse_map_file(const char *filename, t_game *game);
 void		free_map(t_map *map);
 
-// mock
 void		init_mock_map(t_game *game);

@@ -54,10 +54,16 @@ static int	process_color_line(char **parts, t_game *game)
 	uint32_t	color;
 
 	if (validate_color_format(parts[1]) != 0)
-		return (ft_putstr_fd("Error\nInvalid color format.\n", 2), -1);
+	{
+		ft_putstr_fd("Error\nInvalid color format.\n", 2);
+		return (-1);
+	}
 	color = parse_rgb_to_hex(parts[1]);
 	if (color == 0xFFFFFFFF)
-		return (ft_putstr_fd("Error\nInvalid RGB color value.\n", 2), -1);
+	{
+		ft_putstr_fd("Error\nInvalid RGB color value.\n", 2);
+		return (-1);
+	}
 	if (ft_strcmp(parts[0], "F") == 0)
 		game->floor = color;
 	else if (ft_strcmp(parts[0], "C") == 0)
@@ -80,7 +86,9 @@ int	process_one_line(const char *line, t_game *game)
 	else
 	{
 		free_file_array(parts);
-		return (ft_putstr_fd("Error\nUnknown identifier.\n", 2), -1);
+		ft_putstr_fd("Error\nUnknown identifier.\n", 2);
+		return (-1);
 	}
-	return (free_file_array(parts), result);
+	free_file_array(parts);
+	return (result);
 }

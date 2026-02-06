@@ -19,11 +19,8 @@ void	raycast(t_game *game)
 	x = 0;
 	while (x < game->mlx->width)
 	{
-		// calcula os dados para 8 raios
 		calculate_batch(game, x);
-		// desenha os 8 raios baseados nos dados calculados
 		render_batch(game, x, -1);
-		//avança o bloco
 		x += BATCH_SIZE;
 	}
 }

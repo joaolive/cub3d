@@ -1,5 +1,5 @@
 #include "cub3d.h"
-#include "MLX42/MLX42.h" // Incluir explicitamente para mlx_delete_image/texture
+#include "MLX42/MLX42.h"
 
 static void	destroy_assets(t_game *game)
 {
@@ -29,16 +29,9 @@ static void	destroy_assets(t_game *game)
 	game->assets = NULL;
 }
 
-void	free_game_resources(t_game *game)
+static void	free_wall_textures(t_game *game)
 {
 	int	i;
-
-	if (!game)
-		return ;
-
-	// 1. Liberar recursos MLX
-	if (game->img)
-		mlx_delete_image(game->mlx, game->img); // Corrigido: mlx e imagem
 
 	i = 0;
 	while (i < 4)
@@ -49,16 +42,17 @@ void	free_game_resources(t_game *game)
 			free(game->tex_paths[i]);
 		i++;
 	}
+}
 
-	// 2. Liberar assets do hash table (guardam mlx_image_t*)
+void	free_game_resources(t_game *game)
+{
+	if (!game)
+		return ;
+	if (game->img)
+		mlx_delete_image(game->mlx, game->img);
+	free_wall_textures(game);
 	destroy_assets(game);
-
-	// 3. Liberar o mapa
 	free_map(&game->map);
-
-	// 4. Terminar MLX (destrói janela e display internamente)
 	if (game->mlx)
-		mlx_terminate(game->mlx); 
-
-	// 5. A estrutura t_game é alocada na pilha em main.c, não precisa de free(game) aqui.
+		mlx_terminate(game->mlx);
 }

@@ -1,7 +1,7 @@
 #include "parsing.h"
 #include <stdio.h>
 
-static int free_trimmed_and_return(char *trimmed, int ret_val)
+static int	free_trimmed_and_return(char *trimmed, int ret_val)
 {
 	free(trimmed);
 	return (ret_val);

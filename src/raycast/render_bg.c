@@ -12,7 +12,7 @@
 
 #include "cub3d.h"
 
-static void fill_block(uint64_t *buffer, uint64_t pattern, uint64_t size)
+static void	fill_block(uint64_t *buffer, uint64_t pattern, uint64_t size)
 {
 	uint64_t	i;
 
@@ -33,20 +33,25 @@ static void fill_block(uint64_t *buffer, uint64_t pattern, uint64_t size)
 		buffer[i++] = pattern;
 }
 
+static uint64_t	make_pattern(uint32_t color)
+{
+	uint64_t	pattern;
+
+	pattern = ((uint64_t)color << 32) | color;
+	return (pattern);
+}
+
 void	render_bg(t_game *game)
 {
 	uint64_t	*buffer;
 	uint64_t	ceiling_pattern;
 	uint64_t	floor_pattern;
-	uint32_t	color;
 	uint64_t	total_qwords;
 	uint64_t	half_qwords;
 
 	buffer = (uint64_t *)game->img->pixels;
-	color = game->ceiling;
-	ceiling_pattern = ((uint64_t)color << 32) | color;
-	color = game->floor;
-	floor_pattern = ((uint64_t)color << 32) | color;
+	ceiling_pattern = make_pattern(game->ceiling);
+	floor_pattern = make_pattern(game->floor);
 	total_qwords = (game->img->width * game->img->height) >> 1;
 	half_qwords = total_qwords >> 1;
 	fill_block(buffer, ceiling_pattern, half_qwords);

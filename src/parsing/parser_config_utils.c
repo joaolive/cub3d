@@ -1,11 +1,11 @@
 #include "parsing.h"
 #include <stdio.h>
 
-void update_parsing_state(t_config_parsing_state *parse_state)
+void	update_parsing_state(t_config_parsing_state *parse_state)
 {
-	int texture_block_complete;
-	int color_block_complete;
-	int all_configs_complete;
+	int	texture_block_complete;
+	int	color_block_complete;
+	int	all_configs_complete;
 
 	texture_block_complete = (parse_state->current_block_type == TYPE_TEXTURE
 			&& parse_state->tex_count == 4);
@@ -36,8 +36,9 @@ t_line_type	get_line_type(const char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] != ' ' && line[i] != '1' && line[i] != '0' && line[i] != 'N'
-			&& line[i] != 'S' && line[i] != 'W' && line[i] != 'E')
+		if (line[i] != ' ' && line[i] != '1' && line[i] != '0'
+			&& line[i] != 'N' && line[i] != 'S' && line[i] != 'W'
+			&& line[i] != 'E')
 			return (TYPE_INVALID);
 		i++;
 	}

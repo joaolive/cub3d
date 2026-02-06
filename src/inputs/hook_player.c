@@ -12,17 +12,15 @@
 
 #include "cub3d.h"
 
-// rotaciona o vetor de direção e o vetor do plano da câmera
 static void	rotate_player(t_player *player, double rot_speed)
 {
 	double	old_dir_x;
 	double	old_plane_x;
 
-	// rotacionando a direção
 	old_dir_x = player->dir.x;
 	player->dir.x = player->dir.x * cos(rot_speed) - player->dir.y * sin(rot_speed);
 	player->dir.y = old_dir_x * sin(rot_speed) + player->dir.y * cos(rot_speed);
-	// rotacionando o plano da câmera (plane)
+
 	old_plane_x = player->plane.x;
 	player->plane.x = player->plane.x * cos(rot_speed) - player->plane.y * sin(rot_speed);
 	player->plane.y = old_plane_x * sin(rot_speed) + player->plane.y * cos(rot_speed);
@@ -35,11 +33,11 @@ static void	move_player(t_player *player, t_map *map, double move_x, double move
 
 	new_pos.x = (int)(player->pos.x + move_x);
 	map_grid.y = (int)player->pos.y;
-	if (map->grid[map_grid.y][new_pos.x] != '1') //TODO depois tenho que alterar para aceitar outros obstáculos
+	if (map->grid[map_grid.y][new_pos.x] != '1')
 		player->pos.x += move_x;
 	new_pos.y = (int)(player->pos.y + move_y);
 	map_grid.x = (int)player->pos.x;
-	if (map->grid[new_pos.y][map_grid.x] != '1') //TODO mesma coisa do outro
+	if (map->grid[new_pos.y][map_grid.x] != '1')
 		player->pos.y += move_y;
 }
 

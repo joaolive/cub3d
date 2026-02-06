@@ -24,13 +24,13 @@ int main(int argc, char **argv)
 	if (parse_map_file(argv[1], &game) || init_window(&game)
 		|| load_assets(&game))
 	{
-		free_game_resources(&game); // Adicionado: Libera recursos em caso de falha no parsing
+		free_game_resources(&game);
 		return (1);
 	}
 	render_player(&game);
 	mlx_key_hook(game.mlx, &key_handler, &game);
 	mlx_loop_hook(game.mlx, &game_loop, &game);
 	mlx_loop(game.mlx);
-	free_game_resources(&game); // Substituído: Chamada à nova função de liberação de recursos
+	free_game_resources(&game);
 	return (0);
 }

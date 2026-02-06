@@ -19,7 +19,7 @@ static mlx_texture_t	*load_texture(char *path)
 	texture = mlx_load_png(path);
 	if (!texture)
 	{
-		printf("Erro ao carregar textura: %s\n", path);
+		printf("Error loading texture: %s\n", path);
 		return (NULL);
 	}
 	return (texture);
@@ -32,7 +32,7 @@ static uint8_t	load(t_game *game, char *key, char *path, uint32_t count)
 	char			*path_idx;
 	uint8_t			i;
 
-	key_idx = key + ft_strlen(key) -1;
+	key_idx = key + ft_strlen(key) - 1;
 	path_idx = ft_strrchr(path, '.') - 1;
 	i = -1;
 	while (++i < count)
@@ -42,7 +42,6 @@ static uint8_t	load(t_game *game, char *key, char *path, uint32_t count)
 		tex = load_texture(path);
 		if (!tex || ft_htabinsert(game->assets, key, tex))
 		{
-			//ft_terminate(game); // TODO
 			return (1);
 		}
 	}

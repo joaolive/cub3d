@@ -18,9 +18,6 @@ void	key_handler(mlx_key_data_t key, void *param)
 
 	game = (t_game *)param;
 	if (key.key == MLX_KEY_ESCAPE && key.action == MLX_PRESS)
-	{
-		//terminate(game); //TODO
 		return ;
-	}
 	player_controls(key, game);
 }

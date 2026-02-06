@@ -12,7 +12,7 @@ int	validate_map_characters(const t_map *map)
 	{
 		j = 0;
 		if (!map->grid[i])
-			return (-1); 
+			return (-1);
 		while (map->grid[i][j])
 		{
 			if (map->grid[i][j] != '0' && map->grid[i][j] != '1' &&
@@ -34,10 +34,10 @@ static int	check_cell_neighbors(const t_map *map, int y, int x)
 	size_t	len_curr;
 
 	if (y == 0 || y == map->height - 1 || x == 0)
-		return (-1); 
+		return (-1);
 	len_curr = ft_strlen(map->grid[y]);
 	if ((size_t)x == len_curr - 1)
-		return (-1); 
+		return (-1);
 	len_up = ft_strlen(map->grid[y - 1]);
 	if ((size_t)x >= len_up || map->grid[y - 1][x] == ' ')
 		return (-1);

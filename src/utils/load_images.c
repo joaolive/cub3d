@@ -60,7 +60,7 @@
 //     return (0);
 // }
 
-static mlx_image_t	*load_image(mlx_t *mlx, char *path)
+mlx_image_t	*load_image(mlx_t *mlx, char *path)
 {
 	mlx_texture_t	*texture;
 	mlx_image_t		*image;

@@ -21,7 +21,8 @@ int main(int argc, char **argv)
 		return (1);
 	}
 	ft_bzero(&game, sizeof(t_game));
-	if (parse_map_file(argv[1], &game) || init_window(&game))
+	if (parse_map_file(argv[1], &game) || init_window(&game)
+		|| load_assets(&game))
 	{
 		free_game_resources(&game); // Adicionado: Libera recursos em caso de falha no parsing
 		return (1);

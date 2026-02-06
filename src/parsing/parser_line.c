@@ -15,47 +15,37 @@ static char	**parse_line_parts(const char *line)
 	return (parts);
 }
 
-static int	load_texture_by_direction(char *direction, char *path, t_game *game)
+static int	get_tex_index(char *direction)
 {
 	if (ft_strcmp(direction, "NO") == 0)
-	{
-		game->walls[TEX_NORTH].tex = mlx_load_png(path);
-		if (!game->walls[TEX_NORTH].tex)
-			return (-1);
-	}
-	else if (ft_strcmp(direction, "SO") == 0)
-	{
-		game->walls[TEX_SOUTH].tex = mlx_load_png(path);
-		if (!game->walls[TEX_SOUTH].tex)
-			return (-1);
-	}
-	else if (ft_strcmp(direction, "WE") == 0)
-	{
-		game->walls[TEX_WEST].tex = mlx_load_png(path);
-		if (!game->walls[TEX_WEST].tex)
-			return (-1);
-	}
-	else if (ft_strcmp(direction, "EA") == 0)
-	{
-		game->walls[TEX_EAST].tex = mlx_load_png(path);
-		if (!game->walls[TEX_EAST].tex)
-			return (-1);
-	}
-	return (0);
+		return (TEX_NORTH);
+	if (ft_strcmp(direction, "SO") == 0)
+		return (TEX_SOUTH);
+	if (ft_strcmp(direction, "WE") == 0)
+		return (TEX_WEST);
+	if (ft_strcmp(direction, "EA") == 0)
+		return (TEX_EAST);
+	return (-1);
 }
 
 static int	process_texture_line(char **parts, t_game *game)
 {
+	int	idx;
+
 	if (validate_texture_path(parts[1]) != 0)
 	{
 		ft_putstr_fd("Error\nInvalid texture path.\n", 2);
 		return (-1);
 	}
-	if (load_texture_by_direction(parts[0], parts[1], game) != 0)
+	idx = get_tex_index(parts[0]);
+	if (idx < 0 || game->tex_paths[idx])
 	{
-		ft_putstr_fd("Error\nFailed to load texture.\n", 2);
+		ft_putstr_fd("Error\nDuplicate or invalid texture id.\n", 2);
 		return (-1);
 	}
+	game->tex_paths[idx] = ft_strdup(parts[1]);
+	if (!game->tex_paths[idx])
+		return (-1);
 	return (0);
 }
 

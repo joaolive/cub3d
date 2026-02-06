@@ -135,6 +135,7 @@ typedef struct s_game
 	t_batch		batch;
 	t_ray		ray;
 	t_wall_tex	walls[4]; // [0]=N, [1]=S, [2]=W, [3]=E
+	char		*tex_paths[4];
 	double		delta_time;
 	uint32_t	floor; // RGBA hex
 	uint32_t	ceiling; // RGBA hex
@@ -165,6 +166,8 @@ void		render_player(t_game *game);
 // utils
 uint8_t		load_textures(t_game *game, char *key, char *path, uint32_t count);
 uint8_t		load_images(t_game *game, char *key, char *path, uint32_t count);
+mlx_image_t	*load_image(mlx_t *mlx, char *path);
+int			load_assets(t_game *game);
 uint32_t	apply_depth_shading(uint32_t rgba, float dist);
 uint32_t	apply_wall_shading(uint32_t rgba);
 uint32_t	lerp(uint32_t color, uint32_t fog_color, uint32_t t);

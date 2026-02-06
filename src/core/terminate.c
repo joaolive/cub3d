@@ -1,11 +1,32 @@
 #include "cub3d.h"
 #include "MLX42/MLX42.h" // Incluir explicitamente para mlx_delete_image/texture
 
-// Helper function to correctly free MLX textures stored in the hash table
-void	free_mlx_texture_asset(void *asset_ptr)
+static void	destroy_assets(t_game *game)
 {
-	if (asset_ptr)
-		mlx_delete_texture((mlx_texture_t *)asset_ptr);
+	size_t	i;
+	t_hnode	*node;
+	t_hnode	*next;
+
+	if (!game->assets)
+		return ;
+	i = 0;
+	while (i < game->assets->size)
+	{
+		node = game->assets->buckets[i];
+		while (node)
+		{
+			next = node->next;
+			if (node->value)
+				mlx_delete_image(game->mlx, (mlx_image_t *)node->value);
+			free((void *)node->key);
+			free(node);
+			node = next;
+		}
+		i++;
+	}
+	free(game->assets->buckets);
+	free(game->assets);
+	game->assets = NULL;
 }
 
 void	free_game_resources(t_game *game)
@@ -18,20 +39,19 @@ void	free_game_resources(t_game *game)
 	// 1. Liberar recursos MLX
 	if (game->img)
 		mlx_delete_image(game->mlx, game->img); // Corrigido: mlx e imagem
-	if (game->player.img)
-		mlx_delete_image(game->mlx, game->player.img); // Corrigido: mlx e imagem
 
 	i = 0;
 	while (i < 4)
 	{
 		if (game->walls[i].tex)
 			mlx_delete_texture(game->walls[i].tex);
+		if (game->tex_paths[i])
+			free(game->tex_paths[i]);
 		i++;
 	}
 
-	// 2. Liberar assets do hash table (assumindo que guardam mlx_texture_t*)
-	if (game->assets)
-		ft_tabdestroy(&game->assets, free_mlx_texture_asset); // Usar a nova função auxiliar
+	// 2. Liberar assets do hash table (guardam mlx_image_t*)
+	destroy_assets(game);
 
 	// 3. Liberar o mapa
 	free_map(&game->map);

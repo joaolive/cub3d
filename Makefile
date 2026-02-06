@@ -54,14 +54,13 @@ CPPFLAGS = -Iinclude -I$(LIBFT_DIR)/include -I$(MLX_DIR)/include
 LDFLAGS = -L$(LIBFT_DIR) -L$(MLX_BUILD)
 LDLIBS = -lft -lmlx42 -lglfw -lpng16 -ldl -pthread -lm
 
-SRC_MAIN = main mock_map
+SRC_MAIN = main
 SRC_CORE = init_window game_loop terminate
 SRC_RAYCAST = raycast calculate_batch render_batch render_bg
 SRC_INPUTS = key_handler player_controls hook_player
 SRC_PLAYER = render_player
-SRC_UTILS = apply_wall_shading apply_depth_shading lerp load_image
 SRC_PARSING = parser parser_config_main parser_config_utils parser_line parser_utils parser_file_utils parser_validation_utils parser_map_utils map_structure_validators map_player_validators free_map
-SRC_UTILS = apply_wall_shading apply_depth_shading lerp load_textures load_images
+SRC_UTILS = apply_wall_shading apply_depth_shading lerp load_textures load_images load_assets
 
 # Source files
 SRC = \
@@ -134,4 +133,3 @@ valgrind: $(EXEC)
 
 # PHONY Targets
 .PHONY: all clean fclean re valgrind
-

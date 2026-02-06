@@ -18,14 +18,12 @@ int	init_window(t_game *game)
 	if (!game->mlx)
 	{
 		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
-		free_game_resources(game); // TODO: Renamed from terminate
 		return (1);
 	}
 	game->img = mlx_new_image(game->mlx, WIN_WIDTH, WIN_HEIGHT);
 	if (!game->img || mlx_image_to_window(game->mlx, game->img, 0, 0) == -1)
 	{
 		ft_putendl_fd((char *)mlx_strerror(mlx_errno), 2);
-		free_game_resources(game); // TODO: Renamed from terminate
 		return (1);
 	}
 	return (0);
